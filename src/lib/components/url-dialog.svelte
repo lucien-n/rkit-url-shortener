@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { copyToClipboard } from '$lib/utils';
-	import Button from '$shadcn/button';
+	import { Button } from '$shadcn/button';
 	import * as Dialog from '$shadcn/dialog';
 
 	export let open = false;
