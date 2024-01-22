@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { Expiration } from '$remult/url/enums/expiration.enum';
 	import { createUrlSchema, type CreateUrlSchema } from '$remult/url/inputs/create-url-input';
 	import rules from '$remult/url/url.rules';
 	import * as Form from '$shadcn/form';
@@ -11,6 +12,25 @@
 	export let form: SuperValidated<CreateUrlSchema>;
 
 	const dispatch = createEventDispatcher();
+
+	const expirationSelectOptions: { value: string; label: string }[] = [
+		{
+			value: Expiration.OneDay,
+			label: '1 day'
+		},
+		{
+			value: Expiration.OneWeek,
+			label: '1 week'
+		},
+		{
+			value: Expiration.OneMonth,
+			label: '1 month'
+		},
+		{
+			value: Expiration.OneYear,
+			label: '1 year'
+		}
+	];
 
 	let loading = false;
 
@@ -27,6 +47,19 @@
 
 <Form.Root {form} schema={createUrlSchema} let:config>
 	<form method="POST" class="flex flex-col items-center gap-3" use:enhance={handleSubmit}>
+		<Form.Field {config} name="expiration">
+			<Form.Item class="w-full space-y-0">
+				<Form.Validation />
+				<Form.Select>
+					<Form.SelectTrigger placeholder="Expiration" />
+					<Form.SelectContent>
+						{#each expirationSelectOptions as { value, label } (value)}
+							<Form.SelectItem {value}>{label}</Form.SelectItem>
+						{/each}
+					</Form.SelectContent>
+				</Form.Select>
+			</Form.Item>
+		</Form.Field>
 		<Form.Field {config} name="url">
 			<Form.Item class="w-full space-y-0">
 				<Form.Validation />

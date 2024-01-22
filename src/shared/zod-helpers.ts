@@ -7,14 +7,14 @@ export const getZLengthError = (length: number, field: string, type: 'min' | 'ma
 		type === 'min' ? 'least' : 'most'
 	} ${length} characters long`;
 
-export const getZStringErrors = (field: string) => ({
+export const getZErrors = (field: string) => ({
 	required_error: `${capitalizeFirst(field)} is required`,
 	invalid_type_error: `${capitalizeFirst(field)} must be a string`
 });
 
 export const getZString = (field: string, { min, max }: { min: number; max: number }) =>
 	z
-		.string(getZStringErrors(field))
+		.string(getZErrors(field))
 		.min(min, getZLengthError(min, field, 'min'))
 		.max(max, getZLengthError(max, field, 'max'));
 
