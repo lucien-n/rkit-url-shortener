@@ -38,11 +38,18 @@
 				class="flex items-center gap-1 "
 				on:click={() => {
 					if (copySucceeded) return;
-					copyToClipboard(shortenedUrl, () => {
-						copySucceeded = true;
-						toast.success('Url copied to your clipboard successfully!');
-						setTimeout(() => (copySucceeded = false), 2000);
-					});
+					copyToClipboard(
+						shortenedUrl,
+						() => {
+							copySucceeded = true;
+							toast.success('Url copied to your clipboard successfully!');
+							setTimeout(() => (copySucceeded = false), 2000);
+						},
+						() => {
+							copySucceeded = false;
+							toast.error('An error occured while copying to your clipboard.');
+						}
+					);
 				}}
 				>{copySucceeded ? 'Copied!' : 'Copy'}
 				{#if !copySucceeded}

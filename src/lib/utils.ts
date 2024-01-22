@@ -1,10 +1,7 @@
-export const copyToClipboard = (content: string, onSuccess?: () => void) => {
-	navigator.clipboard.writeText(content).then(
-		() => {
-			onSuccess && onSuccess();
-		},
-		(err) => {
-			console.error('Async: Could not copy text: ', err);
-		}
-	);
+export const copyToClipboard = (
+	content: string,
+	onSuccess: () => void = () => undefined,
+	onError: () => void = () => undefined
+) => {
+	navigator.clipboard.writeText(content).then(onSuccess, onError);
 };
