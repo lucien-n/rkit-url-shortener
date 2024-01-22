@@ -34,6 +34,6 @@ export class UrlsController {
 	@BackendMethod({ allowed: false })
 	static async incrementViews(tinyId: string) {
 		const url = await this.findByTinyId(tinyId);
-		await remult.repo(Url).update(url.id, { redirects: url.redirects + 1 });
+		return remult.repo(Url).update(url.id, { redirects: url.redirects + 1 });
 	}
 }
