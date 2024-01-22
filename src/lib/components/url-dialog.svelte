@@ -3,6 +3,7 @@
 	import { Button } from '$shadcn/button';
 	import * as Dialog from '$shadcn/dialog';
 	import { ClipboardCopy } from 'radix-icons-svelte';
+	import { toast } from 'svelte-sonner';
 
 	export let open = false;
 	export let shortenedUrl: string;
@@ -39,6 +40,7 @@
 					if (copySucceeded) return;
 					copyToClipboard(shortenedUrl, () => {
 						copySucceeded = true;
+						toast.success('Url copied to your clipboard successfully!');
 						setTimeout(() => (copySucceeded = false), 2000);
 					});
 				}}
