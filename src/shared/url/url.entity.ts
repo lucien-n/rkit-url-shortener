@@ -8,6 +8,9 @@ export class Url {
 	@Fields.string()
 	url!: string;
 
+	@Fields.string()
+	tinyId!: string;
+
 	@Fields.createdAt()
 	createdAt!: Date;
 }

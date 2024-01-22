@@ -18,7 +18,7 @@ export const actions: Actions = {
 			const shortenedUrl = await UrlsController.create({ url });
 
 			return {
-				shortenedUrl: event.url.origin + '/' + shortenedUrl.id
+				shortenedUrl: event.url.origin + '/' + shortenedUrl.tinyId
 			};
 		})
 };

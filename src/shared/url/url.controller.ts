@@ -1,3 +1,4 @@
+import { generateId } from '$remult/helper';
 import { parseZInputs } from '$remult/zod-helpers';
 import { BackendMethod, Controller, remult } from 'remult';
 import { createUrlSchema, type CreateUrlInput } from './inputs/create-url-input';
@@ -24,6 +25,9 @@ export class UrlsController {
 		const existingUrl = await this.findByUrl(url);
 		if (existingUrl) return existingUrl;
 
-		return remult.repo(Url).insert({ url });
+		let tinyId = generateId();
+		while (await this.findById(tinyId)) tinyId = generateId();
+
+		return remult.repo(Url).insert({ url, tinyId });
 	}
 }
