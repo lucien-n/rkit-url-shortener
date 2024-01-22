@@ -1,4 +1,5 @@
 <script lang="ts">
+	import MostViewed from '$lib/components/most-viewed.svelte';
 	import UrlDialog from '$lib/components/url-dialog.svelte';
 	import UrlForm from '$lib/components/url-form.svelte';
 	import { toast } from 'svelte-sonner';
@@ -10,7 +11,7 @@
 	let shortenedUrl = '';
 </script>
 
-<div class="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+<div class="flex min-h-screen flex-col items-center justify-center space-y-12 px-4 sm:px-6 lg:px-8">
 	<div class="w-full max-w-xl space-y-8">
 		<div>
 			<h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-gray-100">
@@ -34,6 +35,8 @@
 			/>
 		</div>
 	</div>
+
+	<MostViewed mostViewedUrls={data.mostViewedUrls} />
 </div>
 
 <UrlDialog {shortenedUrl} bind:open={showSuccessDialog} />

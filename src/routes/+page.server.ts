@@ -6,7 +6,8 @@ import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
 	return {
-		form: await superValidate(createUrlSchema)
+		form: await superValidate(createUrlSchema),
+		mostViewedUrls: await UrlsController.getMostViewed(3)
 	};
 };
 

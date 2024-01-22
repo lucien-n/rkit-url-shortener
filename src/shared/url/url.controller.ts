@@ -36,4 +36,11 @@ export class UrlsController {
 		const url = await this.findByTinyId(tinyId);
 		return remult.repo(Url).update(url.id, { redirects: url.redirects + 1 });
 	}
+
+	@BackendMethod({ allowed: false })
+	static async getMostViewed(limit = 5) {
+		return (await remult.repo(Url).find({ orderBy: { redirects: 'desc' }, limit })).map((url) => ({
+			...url
+		}));
+	}
 }
