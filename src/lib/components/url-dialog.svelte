@@ -18,7 +18,12 @@
 		</Dialog.Header>
 
 		<div class="my-5 text-center">
-			<Button class="border text-lg" variant="link" href={shortenedUrl}>
+			<Button
+				class="border text-lg"
+				variant="link"
+				href={shortenedUrl}
+				data-sveltekit-preload-data="off"
+			>
 				<p class="text-foreground/80">
 					{shortenedUrl.split('/').slice(0, -1).join('/')}/
 				</p>
