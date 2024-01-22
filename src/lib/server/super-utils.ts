@@ -28,8 +28,13 @@ export const superFormAction = async <
 		});
 	}
 
-	const msg = await callback(form);
-	if (msg) return msg;
+	// message() needs to be thrown
+	try {
+		const data = await callback(form);
+		if (data) return { ...data, form };
+	} catch (e) {
+		return e;
+	}
 
 	return {
 		form
