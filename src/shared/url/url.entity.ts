@@ -11,6 +11,9 @@ export class Url {
 	@Fields.string()
 	tinyId!: string;
 
+	@Fields.number()
+	redirects: number = 0;
+
 	@Fields.createdAt()
 	createdAt!: Date;
 }

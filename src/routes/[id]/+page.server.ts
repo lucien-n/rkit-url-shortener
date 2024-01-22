@@ -9,5 +9,7 @@ export const load: PageServerLoad = async ({ params }) => {
 
 	if (!url) redirect(303, '/');
 
+	await UrlsController.incrementViews(url.tinyId);
+
 	redirect(308, url.url);
 };
