@@ -1,13 +1,26 @@
+import { redis } from '$lib/server/redis';
 import { superFormAction } from '$lib/server/super-utils';
 import { createUrlSchema } from '$remult/url/inputs/create-url-input';
 import { UrlsController } from '$remult/url/url.controller';
 import { superValidate } from 'sveltekit-superforms/server';
 import type { Actions, PageServerLoad } from './$types';
 
+const getMostViewedUrls = async () => {
+	const cached = await redis.get('mostViewedUrls');
+	if (cached) {
+		return JSON.parse(cached);
+	}
+
+	const mostViewedUrls = await UrlsController.getMostViewed(3);
+	await redis.set('mostViewedUrls', JSON.stringify(mostViewedUrls), 'EX', 900);
+
+	return mostViewedUrls;
+};
+
 export const load: PageServerLoad = async () => {
 	return {
 		form: await superValidate(createUrlSchema),
-		mostViewedUrls: await UrlsController.getMostViewed(3)
+		mostViewedUrls: await getMostViewedUrls()
 	};
 };
 
