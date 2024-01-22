@@ -11,9 +11,9 @@
 </script>
 
 <div class="flex h-full w-full flex-col items-center justify-center">
-	<div class="text-center text-7xl font-bold tracking-tight">Url Shortener</div>
+	<div class="absolute mb-40 text-center text-7xl font-bold tracking-tight">Url Shortener</div>
 
-	<div class="mt-10 w-2/3">
+	<div class="w-2/3">
 		<UrlForm
 			form={data.form}
 			on:success={({ detail }) => {
