@@ -3,7 +3,7 @@
 	import { createUrlSchema, type CreateUrlSchema } from '$remult/url/inputs/create-url-input';
 	import rules from '$remult/url/url.rules';
 	import * as Form from '$shadcn/form';
-	import type { SubmitFunction } from 'formsnap';
+	import type { SubmitFunction } from '@sveltejs/kit';
 	import { createEventDispatcher } from 'svelte';
 	import type { SuperValidated } from 'sveltekit-superforms';
 
