@@ -14,18 +14,29 @@
 	<Dialog.Content class="sm:max-w-[425px]">
 		<Dialog.Header>
 			<Dialog.Title>Success!</Dialog.Title>
-			<Dialog.Description>Here's your shortened url!</Dialog.Description>
-			<Button variant="link" href={shortenedUrl}>{shortenedUrl}</Button>
+			<Dialog.Description>Here's your short url!</Dialog.Description>
 		</Dialog.Header>
+
+		<div class="my-5 text-center">
+			<Button class="border text-lg" variant="link" href={shortenedUrl}>
+				<p class="text-foreground/80">
+					{shortenedUrl.split('/').slice(0, -1).join('/')}/
+				</p>
+				<p class="font-bold">{shortenedUrl.split('/').slice(-1)}</p>
+			</Button>
+		</div>
 
 		<Dialog.Footer>
 			<Button variant="secondary" on:click={() => (open = false)}>Close</Button>
 			<Button
-				class="flex items-center gap-1"
-				on:click={() =>
+				class="flex items-center gap-1 "
+				on:click={() => {
+					if (copySucceeded) return;
 					copyToClipboard(shortenedUrl, () => {
 						copySucceeded = true;
-					})}
+						setTimeout(() => (copySucceeded = false), 2000);
+					});
+				}}
 				>{copySucceeded ? 'Copied!' : 'Copy'}
 				{#if !copySucceeded}
 					<ClipboardCopy />
