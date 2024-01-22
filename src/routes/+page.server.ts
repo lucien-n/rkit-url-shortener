@@ -1,4 +1,4 @@
-import { redis } from '$lib/server/redis';
+import { cacheUrl, redis } from '$lib/server/redis';
 import { superFormAction } from '$lib/server/super-utils';
 import { createUrlSchema } from '$remult/url/inputs/create-url-input';
 import { UrlsController } from '$remult/url/url.controller';
@@ -30,6 +30,8 @@ export const actions: Actions = {
 			const { url } = form.data;
 
 			const shortenedUrl = await UrlsController.create({ url });
+
+			await cacheUrl(shortenedUrl);
 
 			return {
 				shortenedUrl: event.url.origin + '/' + shortenedUrl.tinyId
