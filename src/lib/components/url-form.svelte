@@ -50,7 +50,7 @@
 		<Form.Field {config} name="expiration">
 			<Form.Item class="w-full space-y-0">
 				<Form.Validation />
-				<Form.Select>
+				<Form.Select selected={expirationSelectOptions[2]}>
 					<Form.SelectTrigger placeholder="Expiration" />
 					<Form.SelectContent>
 						{#each expirationSelectOptions as { value, label } (value)}

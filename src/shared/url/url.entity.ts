@@ -1,5 +1,4 @@
 import { Entity, Fields } from 'remult';
-import { Expiration } from './enums/expiration.enum';
 
 @Entity<Url>('urls')
 export class Url {
@@ -15,8 +14,8 @@ export class Url {
 	@Fields.number()
 	redirects: number = 0;
 
-	@Fields.object()
-	expiration: Expiration = Expiration.OneMonth;
+	@Fields.date()
+	expiratesAt!: Date;
 
 	@Fields.createdAt()
 	createdAt!: Date;

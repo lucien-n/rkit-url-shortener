@@ -27,14 +27,14 @@ export const load: PageServerLoad = async () => {
 export const actions: Actions = {
 	default: (event) =>
 		superFormAction(event, createUrlSchema, async (form) => {
-			const { url } = form.data;
+			const { url, expiration } = form.data;
 
-			const shortenedUrl = await UrlsController.create({ url });
+			const shortenedUrl = await UrlsController.create({ url, expiration });
 
 			await cacheUrl(shortenedUrl);
 
 			return {
-				shortenedUrl: event.url.origin + '/' + shortenedUrl.tinyId
+				shortenedUrl: { ...shortenedUrl }
 			};
 		})
 };

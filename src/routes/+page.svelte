@@ -2,13 +2,14 @@
 	import MostViewed from '$lib/components/most-viewed.svelte';
 	import UrlDialog from '$lib/components/url-dialog.svelte';
 	import UrlForm from '$lib/components/url-form.svelte';
+	import type { Url } from '$remult/url/url.entity';
 	import { toast } from 'svelte-sonner';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
 
 	let showSuccessDialog = false;
-	let shortenedUrl = '';
+	let shortenedUrl: Url | null = null;
 </script>
 
 <div class="flex min-h-screen flex-col items-center justify-center space-y-12 px-4 sm:px-6 lg:px-8">
@@ -25,9 +26,8 @@
 			<UrlForm
 				form={data.form}
 				on:success={({ detail }) => {
-					const url = detail.data.shortenedUrl;
+					shortenedUrl = detail.data.shortenedUrl;
 					showSuccessDialog = true;
-					shortenedUrl = url;
 				}}
 				on:failure={() => {
 					toast.error('An error occured, please try again later');
@@ -39,4 +39,4 @@
 	<MostViewed mostViewedUrls={data.mostViewedUrls} />
 </div>
 
-<UrlDialog {shortenedUrl} bind:open={showSuccessDialog} />
+<UrlDialog url={shortenedUrl} bind:open={showSuccessDialog} />

@@ -20,7 +20,7 @@ export class UrlsController {
 
 	@BackendMethod({ allowed: false })
 	static async create(inputs: CreateUrlInput) {
-		const { url } = parseZInputs(inputs, createUrlSchema);
+		const { url, expiration } = parseZInputs(inputs, createUrlSchema);
 
 		const existingUrl = await this.findByUrl(url);
 		if (existingUrl) return existingUrl;
@@ -28,7 +28,10 @@ export class UrlsController {
 		let tinyId = generateId();
 		while (await this.findByTinyId(tinyId)) tinyId = generateId();
 
-		return remult.repo(Url).insert({ url, tinyId });
+		const expiratesAt = new Date();
+		expiratesAt.setUTCHours(new Date().getUTCDay() + expiration * 24);
+
+		return remult.repo(Url).insert({ url, tinyId, expiratesAt });
 	}
 
 	@BackendMethod({ allowed: false })
