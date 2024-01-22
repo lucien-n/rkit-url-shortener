@@ -5,7 +5,7 @@ import type { PageServerLoad } from './$types';
 export const load: PageServerLoad = async ({ params }) => {
 	const { id } = params;
 
-	const url = await UrlsController.findById(id);
+	const url = await UrlsController.findByTinyId(id);
 
 	if (!url) redirect(303, '/');
 

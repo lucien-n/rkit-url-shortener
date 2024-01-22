@@ -9,8 +9,8 @@ export class UrlsController {
 	constructor() {}
 
 	@BackendMethod({ allowed: false })
-	static findById(id: string) {
-		return remult.repo(Url).findFirst({ id });
+	static findByTinyId(tinyId: string) {
+		return remult.repo(Url).findFirst({ tinyId });
 	}
 
 	@BackendMethod({ allowed: false })
@@ -26,7 +26,7 @@ export class UrlsController {
 		if (existingUrl) return existingUrl;
 
 		let tinyId = generateId();
-		while (await this.findById(tinyId)) tinyId = generateId();
+		while (await this.findByTinyId(tinyId)) tinyId = generateId();
 
 		return remult.repo(Url).insert({ url, tinyId });
 	}
