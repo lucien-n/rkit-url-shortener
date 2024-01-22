@@ -3,15 +3,15 @@ import { UrlsController } from '$remult/url/url.controller';
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ params, locals: { redis } }) => {
+export const load: PageServerLoad = async ({ params }) => {
 	const { tinyId } = params;
 
-	let url = await getUrlFromCache(redis, tinyId);
+	let url = await getUrlFromCache(tinyId);
 	if (!url) {
 		url = await UrlsController.findByTinyId(tinyId);
 		if (!url) redirect(303, '/');
 
-		cacheUrl(redis, url);
+		cacheUrl(url);
 	}
 
 	await UrlsController.incrementViews(tinyId);

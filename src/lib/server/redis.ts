@@ -1,7 +1,10 @@
+import { PRIVATE_REDIS_URL } from '$env/static/private';
 import type { Url } from '$remult/url/url.entity';
-import type { RedisClientType } from 'redis';
+import Redis from 'ioredis';
 
-export const getUrlFromCache = async (redis: RedisClientType, tinyId: string) => {
+export const redis = new Redis(PRIVATE_REDIS_URL);
+
+export const getUrlFromCache = async (tinyId: string) => {
 	const redisKey = `url:${tinyId}`;
 	const cached = await redis.get(redisKey);
 
@@ -10,7 +13,7 @@ export const getUrlFromCache = async (redis: RedisClientType, tinyId: string) =>
 	}
 };
 
-export const cacheUrl = async (redis: RedisClientType, url: Url) => {
+export const cacheUrl = async (url: Url) => {
 	const redisKey = `url:${url.tinyId}`;
-	await redis.set(redisKey, JSON.stringify(url), { EX: 600 });
+	await redis.set(redisKey, JSON.stringify(url), 'EX', 600);
 };
