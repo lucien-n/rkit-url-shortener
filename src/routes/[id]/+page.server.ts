@@ -4,17 +4,17 @@ import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {
-	const { tinyId } = params;
+	const { id } = params;
 
-	let url = await getUrlFromCache(tinyId);
+	let url = await getUrlFromCache(id);
 	if (!url) {
-		url = await UrlsController.findByTinyId(tinyId);
+		url = await UrlsController.findById(id);
 		if (!url) redirect(303, '/');
 
 		cacheUrl(url);
 	}
 
-	await UrlsController.incrementViews(tinyId);
+	await UrlsController.incrementViews(id);
 
 	redirect(308, url.url);
 };

@@ -35,7 +35,7 @@
 				<p class="text-foreground/80">
 					{browser ? window.location.origin : 'origin'}/
 				</p>
-				<p class="font-bold">{url.tinyId}</p>
+				<p class="font-bold">{url.id}</p>
 			</Button>
 		</div>
 

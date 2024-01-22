@@ -19,7 +19,7 @@
 		{#each mostViewedUrls as url, index (url.id)}
 			<div class={cn('mx-auto flex items-center gap-1', index === 2 ? 'col-span-2 mx-auto' : '')}>
 				{#if browser}
-					{@const href = browser ? window.location.origin + '/' + url.tinyId : 'l'}
+					{@const href = browser ? window.location.origin + '/' + url.id : 'l'}
 					<Button
 						{href}
 						variant="link"

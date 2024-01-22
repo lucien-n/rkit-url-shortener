@@ -1,15 +1,12 @@
 import { Entity, Fields } from 'remult';
 
-@Entity<Url>('urls')
+@Entity<Url>('urls', { id: { id: true } })
 export class Url {
-	@Fields.cuid()
+	@Fields.string()
 	id!: string;
 
 	@Fields.string()
 	url!: string;
-
-	@Fields.string()
-	tinyId!: string;
 
 	@Fields.number()
 	redirects: number = 0;

@@ -9,8 +9,8 @@ export class UrlsController {
 	constructor() {}
 
 	@BackendMethod({ allowed: false })
-	static findByTinyId(tinyId: string) {
-		return remult.repo(Url).findFirst({ tinyId });
+	static findById(id: string) {
+		return remult.repo(Url).findFirst({ id });
 	}
 
 	@BackendMethod({ allowed: false })
@@ -25,18 +25,18 @@ export class UrlsController {
 		const existingUrl = await this.findByUrl(url);
 		if (existingUrl) return existingUrl;
 
-		let tinyId = generateId();
-		while (await this.findByTinyId(tinyId)) tinyId = generateId();
+		let id = generateId();
+		while (await this.findById(id)) id = generateId();
 
 		const expiratesAt = new Date();
 		expiratesAt.setUTCHours(new Date().getUTCDay() + expiration * 24);
 
-		return remult.repo(Url).insert({ url, tinyId, expiratesAt });
+		return remult.repo(Url).insert({ id, url, expiratesAt });
 	}
 
 	@BackendMethod({ allowed: false })
-	static async incrementViews(tinyId: string) {
-		const url = await this.findByTinyId(tinyId);
+	static async incrementViews(id: string) {
+		const url = await this.findById(id);
 		return remult.repo(Url).update(url.id, { redirects: url.redirects + 1 });
 	}
 

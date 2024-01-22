@@ -4,8 +4,8 @@ import Redis from 'ioredis';
 
 export const redis = new Redis(PRIVATE_REDIS_URL);
 
-export const getUrlFromCache = async (tinyId: string) => {
-	const redisKey = `url:${tinyId}`;
+export const getUrlFromCache = async (id: string) => {
+	const redisKey = `url:${id}`;
 	const cached = await redis.get(redisKey);
 
 	if (cached) {
@@ -14,6 +14,6 @@ export const getUrlFromCache = async (tinyId: string) => {
 };
 
 export const cacheUrl = async (url: Url) => {
-	const redisKey = `url:${url.tinyId}`;
+	const redisKey = `url:${url.id}`;
 	await redis.set(redisKey, JSON.stringify(url), 'EX', 600);
 };
