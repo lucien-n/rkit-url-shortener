@@ -13,7 +13,7 @@
 <Toaster richColors />
 <ModeWatcher />
 
-<div class="h-full w-full">
+<div class="h-full w-full font-mono">
 	<div class="absolute m-3">
 		<LightSwitch />
 	</div>
