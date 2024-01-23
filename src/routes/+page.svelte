@@ -12,31 +12,32 @@
 	let shortenedUrl: Url | null = null;
 </script>
 
-<div class="flex min-h-screen flex-col items-center justify-center space-y-12 px-4 sm:px-6 lg:px-8">
-	<div class="w-full max-w-xl space-y-8">
-		<div>
-			<h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-gray-100">
-				URL Shortener
-			</h2>
-			<p class="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
-				Enter your long URL below to shorten it
-			</p>
-		</div>
-		<div class="mt-8 space-y-6">
-			<UrlForm
-				form={data.form}
-				on:success={({ detail }) => {
-					shortenedUrl = detail.data.shortenedUrl;
-					showSuccessDialog = true;
-				}}
-				on:failure={() => {
-					toast.error('An error occured, please try again later');
-				}}
-			/>
-		</div>
+<div
+	class="grid min-h-screen w-full grid-rows-3 flex-col items-center justify-center space-y-8 px-4 sm:px-6 lg:px-8"
+>
+	<div class="self-end">
+		<h2 class="mt-6 text-center text-7xl font-extrabold text-gray-900 dark:text-gray-100">
+			URL Shortener
+		</h2>
+		<p class="text-md mt-2 text-center text-gray-600 dark:text-gray-400">
+			Enter your long URL below to shorten it
+		</p>
 	</div>
-
-	<MostViewed mostViewedUrls={data.mostViewedUrls} />
+	<div>
+		<UrlForm
+			form={data.form}
+			on:success={({ detail }) => {
+				shortenedUrl = detail.data.shortenedUrl;
+				showSuccessDialog = true;
+			}}
+			on:failure={() => {
+				toast.error('An error occured, please try again later');
+			}}
+		/>
+	</div>
+	<div class="self-center">
+		<MostViewed mostViewedUrls={data.mostViewedUrls} />
+	</div>
 </div>
 
 <UrlDialog url={shortenedUrl} bind:open={showSuccessDialog} />
