@@ -55,20 +55,27 @@
 			<Form.Item class="w-full space-y-0">
 				<Form.Validation />
 				<Form.Select selected={expirationSelectOptions[2]}>
-					<Form.SelectTrigger placeholder="Expiration" />
-					<Form.SelectContent>
-						{#each expirationSelectOptions as { value, label } (value)}
-							<Form.SelectItem {label} {value}>
-								{label}
-								{#if value === Expiration.Never}
-									<p class="ml-2 text-xs font-semibold italic text-muted-foreground">
-										- If selected, short urls which haven't been used in <strong>90</strong> days will
-										be deleted
-									</p>
-								{/if}
-							</Form.SelectItem>
-						{/each}
-					</Form.SelectContent>
+					<div class="flex">
+						<div
+							class="select-none self-center rounded-md rounded-r-none border border-r-0 bg-muted px-3 py-[.312rem]"
+						>
+							Expiration
+						</div>
+						<Form.SelectTrigger class="rounded-l-none" placeholder="Expiration" />
+						<Form.SelectContent>
+							{#each expirationSelectOptions as { value, label } (value)}
+								<Form.SelectItem {label} {value}>
+									{label}
+									{#if value === Expiration.Never}
+										<p class="ml-2 text-xs font-semibold italic text-muted-foreground">
+											- If selected, short urls which haven't been used in <strong>90</strong> days will
+											be deleted
+										</p>
+									{/if}
+								</Form.SelectItem>
+							{/each}
+						</Form.SelectContent>
+					</div>
 				</Form.Select>
 			</Form.Item>
 		</Form.Field>
