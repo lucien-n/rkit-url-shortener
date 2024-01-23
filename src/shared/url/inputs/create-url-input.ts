@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { getZString } from '../../zod-helpers';
+import { getZString } from '../../helpers/zod';
 import { Expiration } from '../enums/expiration.enum';
 import rules from '../url.rules';
 

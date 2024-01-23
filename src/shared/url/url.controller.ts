@@ -1,5 +1,5 @@
-import { generateId } from '$remult/helper';
-import { parseZInputs } from '$remult/zod-helpers';
+import { generateId, parseZInputs } from '$remult/helpers';
+import { getExpiresAt as getExpiration } from '$remult/helpers/url';
 import { BackendMethod, Controller, remult } from 'remult';
 import { createUrlSchema, type CreateUrlInput } from './inputs/create-url-input';
 import { Url } from './url.entity';
@@ -22,14 +22,19 @@ export class UrlsController {
 	static async create(inputs: CreateUrlInput) {
 		const { url, expiration } = parseZInputs(inputs, createUrlSchema);
 
+		const expiratesAt = getExpiration(expiration);
+
 		const existingUrl = await this.findByUrl(url);
-		if (existingUrl) return existingUrl;
+		if (existingUrl) {
+			if (existingUrl.expiratesAt.getTime() < expiratesAt.getTime()) {
+				return remult.repo(Url).update(existingUrl.id, { expiratesAt });
+			}
+
+			return existingUrl;
+		}
 
 		let id = generateId();
 		while (await this.findById(id)) id = generateId();
-
-		const expiratesAt = new Date();
-		expiratesAt.setUTCHours(new Date().getUTCDay() + expiration * 24);
 
 		return remult.repo(Url).insert({ id, url, expiratesAt });
 	}
