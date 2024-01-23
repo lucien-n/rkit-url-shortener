@@ -58,7 +58,7 @@
 					<Form.SelectTrigger placeholder="Expiration" />
 					<Form.SelectContent>
 						{#each expirationSelectOptions as { value, label } (value)}
-							<Form.SelectItem {value}>
+							<Form.SelectItem {label} {value}>
 								{label}
 								{#if value === Expiration.Never}
 									<p class="ml-2 text-xs font-semibold italic text-muted-foreground">
