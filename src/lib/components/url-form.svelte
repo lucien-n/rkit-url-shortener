@@ -49,7 +49,7 @@
 	};
 </script>
 
-<Form.Root {form} schema={createUrlSchema} let:config class="w-full">
+<Form.Root {form} schema={createUrlSchema} let:config>
 	<form method="POST" class="flex flex-col items-center gap-3" use:enhance={handleSubmit}>
 		<Form.Field {config} name="expiration">
 			<Form.Item class="w-full space-y-0">
