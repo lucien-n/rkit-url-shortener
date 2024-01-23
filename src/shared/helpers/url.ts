@@ -7,6 +7,6 @@
  * */
 export const getExpiresAt = (expiration: number, from = new Date()): Date => {
 	const expiresAt = new Date();
-	expiresAt.setUTCHours(from.getUTCDay() + expiration);
+	expiresAt.setUTCHours(from.getUTCDay() + expiration * 24);
 	return expiresAt;
 };

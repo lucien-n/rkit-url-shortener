@@ -22,12 +22,12 @@ export class UrlsController {
 	static async create(inputs: CreateUrlInput) {
 		const { url, expiration } = parseZInputs(inputs, createUrlSchema);
 
-		const expiratesAt = getExpiration(expiration);
+		const expiresAt = getExpiration(expiration);
 
 		const existingUrl = await this.findByUrl(url);
 		if (existingUrl) {
-			if (existingUrl.expiratesAt.getTime() < expiratesAt.getTime()) {
-				return remult.repo(Url).update(existingUrl.id, { expiratesAt });
+			if (existingUrl.expiresAt.getTime() < expiresAt.getTime()) {
+				return remult.repo(Url).update(existingUrl.id, { expiresAt: expiresAt });
 			}
 
 			return existingUrl;
@@ -36,7 +36,7 @@ export class UrlsController {
 		let id = generateId();
 		while (await this.findById(id)) id = generateId();
 
-		return remult.repo(Url).insert({ id, url, expiratesAt });
+		return remult.repo(Url).insert({ id, url, expiresAt: expiresAt });
 	}
 
 	@BackendMethod({ allowed: false })

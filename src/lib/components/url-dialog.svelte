@@ -2,6 +2,7 @@
 	import { browser } from '$app/environment';
 	import { getDaysBetweenDates } from '$lib/helpers';
 	import { copyToClipboard } from '$lib/utils';
+	import { Expiration } from '$remult/url/enums/expiration.enum';
 	import type { Url } from '$remult/url/url.entity';
 	import { Button } from '$shadcn/button';
 	import * as Dialog from '$shadcn/dialog';
@@ -18,11 +19,20 @@
 	<Dialog.Content class="sm:max-w-[425px]">
 		<Dialog.Header>
 			<Dialog.Title>Success!</Dialog.Title>
-			<Dialog.Description
-				>Here's your short url! It is set to expire in <strong
-					>{getDaysBetweenDates(url.createdAt, url.expiratesAt)}</strong
-				> days</Dialog.Description
-			>
+			<Dialog.Description>
+				<p>Here's your short url!</p>
+				{@const daysToExpiration = getDaysBetweenDates(url.createdAt, url.expiresAt)}
+				{#if daysToExpiration > Expiration.OneYear * 100}
+					<p>
+						It will never expire but will be <strong>deleted</strong> if not used in during
+						<strong>90</strong> days
+					</p>
+				{:else}
+					<p>
+						It is set to expire in <strong>{daysToExpiration}</strong> days
+					</p>
+				{/if}
+			</Dialog.Description>
 		</Dialog.Header>
 
 		<div class="my-5 text-center">

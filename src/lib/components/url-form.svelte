@@ -29,6 +29,10 @@
 		{
 			value: Expiration.OneYear,
 			label: '1 year'
+		},
+		{
+			value: Expiration.Never,
+			label: 'Never'
 		}
 	];
 
@@ -54,7 +58,15 @@
 					<Form.SelectTrigger placeholder="Expiration" />
 					<Form.SelectContent>
 						{#each expirationSelectOptions as { value, label } (value)}
-							<Form.SelectItem {value}>{label}</Form.SelectItem>
+							<Form.SelectItem {value}>
+								{label}
+								{#if value === Expiration.Never}
+									<p class="ml-2 text-xs font-semibold italic text-muted-foreground">
+										- If selected, short urls which haven't been used in <strong>90</strong> days will
+										be deleted
+									</p>
+								{/if}
+							</Form.SelectItem>
 						{/each}
 					</Form.SelectContent>
 				</Form.Select>

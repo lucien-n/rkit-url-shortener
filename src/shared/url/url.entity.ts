@@ -12,7 +12,7 @@ export class Url {
 	redirects: number = 0;
 
 	@Fields.date()
-	expiratesAt!: Date;
+	expiresAt!: Date;
 
 	@Fields.createdAt()
 	createdAt!: Date;
