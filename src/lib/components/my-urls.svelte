@@ -9,7 +9,16 @@
 
 	onMount(async () => {
 		const localUrlsIds = getUrlsIdsFromLocalStorage();
-		urls = await fetch(`/api/urls`);
+		const fetchUrl = new URL(window.location.origin + '/api/urls');
+		fetchUrl.searchParams.set('ids', JSON.stringify(localUrlsIds));
+
+		try {
+			const res = await fetch(fetchUrl);
+			const data = await res.json();
+			if (typeof data === 'object' && data.length) urls = data;
+		} catch (e) {
+			urls = [];
+		}
 	});
 </script>
 
