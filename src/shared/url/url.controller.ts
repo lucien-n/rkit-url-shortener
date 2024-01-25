@@ -14,6 +14,11 @@ export class UrlsController {
 	}
 
 	@BackendMethod({ allowed: false })
+	static findByIds(ids: string[]) {
+		return remult.repo(Url).find({ where: { id: ids } });
+	}
+
+	@BackendMethod({ allowed: false })
 	static findByUrl(url: string) {
 		return remult.repo(Url).findFirst({ url });
 	}
