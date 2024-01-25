@@ -1,8 +1,8 @@
 import { cacheUrl } from '$lib/server/data';
 import { redis } from '$lib/server/redis';
 import { superFormAction } from '$lib/server/super-utils';
-import { createUrlSchema } from '$remult/url/inputs/create-url-input';
-import { UrlsController } from '$remult/url/url.controller';
+import { createShortUrlSchema } from '$remult/short-url/inputs/create-short-url-input';
+import { ShortUrlsController } from '$remult/short-url/short-url.controller';
 import { superValidate } from 'sveltekit-superforms/server';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -12,7 +12,7 @@ const getMostViewedUrls = async () => {
 		return JSON.parse(cached);
 	}
 
-	const mostViewedUrls = await UrlsController.getMostViewed(3);
+	const mostViewedUrls = await ShortUrlsController.getMostViewed(3);
 	await redis.set('mostViewedUrls', JSON.stringify(mostViewedUrls), 'EX', 900);
 
 	return mostViewedUrls;
@@ -20,17 +20,17 @@ const getMostViewedUrls = async () => {
 
 export const load: PageServerLoad = async () => {
 	return {
-		form: await superValidate(createUrlSchema),
+		form: await superValidate(createShortUrlSchema),
 		mostViewedUrls: await getMostViewedUrls()
 	};
 };
 
 export const actions: Actions = {
 	default: (event) =>
-		superFormAction(event, createUrlSchema, async (form) => {
+		superFormAction(event, createShortUrlSchema, async (form) => {
 			const { url, expiration } = form.data;
 
-			const shortenedUrl = await UrlsController.create({ url, expiration });
+			const shortenedUrl = await ShortUrlsController.create({ url, expiration });
 
 			await cacheUrl(shortenedUrl);
 

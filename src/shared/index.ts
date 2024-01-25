@@ -1,5 +1,5 @@
-import { UrlsController } from './url/url.controller';
-import { Url } from './url/url.entity';
+import { ShortUrlsController } from './short-url/short-url.controller';
+import { ShortUrl } from './short-url/short-url.entity';
 
-export const entities = [Url];
-export const controllers = [UrlsController];
+export const entities = [ShortUrl];
+export const controllers = [ShortUrlsController];

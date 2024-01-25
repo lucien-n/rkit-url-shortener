@@ -1,5 +1,5 @@
 import { cacheUrl, getUrl } from '$lib/server/data';
-import { UrlsController } from '$remult/url/url.controller';
+import { ShortUrlsController } from '$remult/short-url/short-url.controller';
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
@@ -11,7 +11,7 @@ export const load: PageServerLoad = async ({ params }) => {
 		cacheUrl(url);
 	}
 
-	await UrlsController.incrementViews(id);
+	await ShortUrlsController.incrementViews(id);
 
 	redirect(308, url.url);
 };

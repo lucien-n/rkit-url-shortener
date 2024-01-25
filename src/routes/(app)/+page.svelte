@@ -1,16 +1,22 @@
 <script lang="ts">
 	import MostViewed from '$lib/components/most-viewed.svelte';
+	import MyUrls from '$lib/components/my-urls.svelte';
 	import UrlDialog from '$lib/components/url-dialog.svelte';
 	import UrlForm from '$lib/components/url-form.svelte';
-	import type { Url } from '$remult/url/url.entity';
+	import { addUrlIdToLocalStorage } from '$lib/utils';
+	import type { ShortUrl } from '$remult/short-url/short-url.entity';
 	import { toast } from 'svelte-sonner';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
 
 	let showSuccessDialog = false;
-	let shortenedUrl: Url | null = null;
+	let shortenedUrl: ShortUrl | null = null;
 </script>
+
+<div class="absolute right-8 top-8">
+	<MyUrls />
+</div>
 
 <div class="mx-auto grid min-h-screen w-full max-w-2xl grid-rows-3 flex-col items-center space-y-8">
 	<div class="self-end">
@@ -27,6 +33,8 @@
 			on:success={({ detail }) => {
 				shortenedUrl = detail.data.shortenedUrl;
 				showSuccessDialog = true;
+
+				if (shortenedUrl) addUrlIdToLocalStorage(shortenedUrl.id);
 			}}
 			on:failure={() => {
 				toast.error('An error occured, please try again later');

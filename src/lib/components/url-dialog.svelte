@@ -2,15 +2,15 @@
 	import { browser } from '$app/environment';
 	import { getDaysBetweenDates } from '$lib/helpers';
 	import { copyToClipboard } from '$lib/utils';
-	import { Expiration } from '$remult/url/enums/expiration.enum';
-	import type { Url } from '$remult/url/url.entity';
+	import { Expiration } from '$remult/short-url/enums/expiration.enum';
+	import type { ShortUrl } from '$remult/short-url/short-url.entity';
 	import { Button } from '$shadcn/button';
 	import * as Dialog from '$shadcn/dialog';
 	import { ClipboardCopy } from 'radix-icons-svelte';
 	import { toast } from 'svelte-sonner';
 
 	export let open = false;
-	export let url: Url;
+	export let url: ShortUrl;
 
 	let copySucceeded = false;
 </script>

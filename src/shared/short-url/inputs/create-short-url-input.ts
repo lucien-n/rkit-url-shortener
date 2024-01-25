@@ -1,13 +1,13 @@
 import { z } from 'zod';
 import { getZString } from '../../helpers/zod';
 import { Expiration } from '../enums/expiration.enum';
-import rules from '../url.rules';
+import rules from '../short-url.rules';
 
-export const createUrlSchema = z.object({
+export const createShortUrlSchema = z.object({
 	url: getZString('url', rules.url).url(),
 	expiration: z.nativeEnum(Expiration).default(Expiration.OneMonth)
 });
 
-export type CreateUrlSchema = typeof createUrlSchema;
+export type CreateShortUrlSchema = typeof createShortUrlSchema;
 
-export type CreateUrlInput = z.infer<CreateUrlSchema>;
+export type CreateShortUrlInput = z.infer<CreateShortUrlSchema>;

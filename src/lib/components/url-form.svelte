@@ -1,15 +1,15 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { Expiration } from '$remult/url/enums/expiration.enum';
-	import { createUrlSchema, type CreateUrlSchema } from '$remult/url/inputs/create-url-input';
-	import rules from '$remult/url/url.rules';
+	import { Expiration } from '$remult/short-url/enums/expiration.enum';
+	import { createShortUrlSchema } from '$remult/short-url/inputs/create-short-url-input';
+	import rules from '$remult/short-url/short-url.rules';
 	import * as Form from '$shadcn/form';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { Link2 } from 'radix-icons-svelte';
 	import { createEventDispatcher } from 'svelte';
 	import type { SuperValidated } from 'sveltekit-superforms';
 
-	export let form: SuperValidated<CreateUrlSchema>;
+	export let form: SuperValidated<createShortUrlSchema>;
 
 	const dispatch = createEventDispatcher();
 
@@ -49,7 +49,7 @@
 	};
 </script>
 
-<Form.Root {form} schema={createUrlSchema} let:config>
+<Form.Root {form} schema={createShortUrlSchema} let:config>
 	<form method="POST" class="flex flex-col items-center gap-3" use:enhance={handleSubmit}>
 		<Form.Field {config} name="expiration">
 			<Form.Item class="w-full space-y-0">

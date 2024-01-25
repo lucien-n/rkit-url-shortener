@@ -1,7 +1,7 @@
 import { Entity, Fields } from 'remult';
 
-@Entity<Url>('urls', { id: { id: true } })
-export class Url {
+@Entity<ShortUrl>('short-urls', { id: { id: true } })
+export class ShortUrl {
 	@Fields.string()
 	id!: string;
 
