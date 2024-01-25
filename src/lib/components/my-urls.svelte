@@ -2,8 +2,6 @@
 	import { getUrlsIdsFromLocalStorage } from '$lib/utils';
 	import { ShortUrl } from '$remult/short-url/short-url.entity';
 	import * as Card from '$shadcn/card';
-	import { Checkbox } from '$shadcn/checkbox';
-	import { Label } from '$shadcn/label';
 	import { Separator } from '$shadcn/separator';
 	import { onMount } from 'svelte';
 	import UrlLink from './url-link.svelte';
@@ -26,16 +24,12 @@
 	});
 </script>
 
-<Card.Root class="min-w-96">
-	<Card.Header>
+<Card.Root class="min-w-96 ">
+	<Card.Header class="pb-2">
 		<Card.Title>Your urls</Card.Title>
 		<Card.Description>Urls created via this device</Card.Description>
 	</Card.Header>
 	<Card.Content>
-		<section class="mb-5 flex items-center gap-3">
-			<Checkbox id="hideUrls" bind:checked={hideUrlsOrigin} />
-			<Label for="hideUrls" class="text-xs text-primary hover:cursor-pointer">Hide origin</Label>
-		</section>
 		<Separator variant="horizontal" class="my-3" />
 
 		{#if urls.length}

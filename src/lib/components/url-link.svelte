@@ -8,7 +8,6 @@
 	import CustomToast from './custom-toast.svelte';
 
 	export let url: ShortUrl;
-	export let hideOrigin = false;
 
 	const formatCount = (count: number) => {
 		const formatter = Intl.NumberFormat('en', { notation: 'compact' });
@@ -28,7 +27,7 @@
 		>
 			<Link2 />
 			<p>
-				<span class="text-primary/50">{hideOrigin ? '' : origin}</span><strong>{url.id}</strong>
+				<span class="text-primary/50">{origin}</span><strong>{url.id}</strong>
 			</p>
 		</Button>
 		<p
