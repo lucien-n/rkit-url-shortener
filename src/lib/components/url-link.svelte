@@ -5,6 +5,7 @@
 	import { Link2 } from 'radix-icons-svelte';
 
 	export let url: ShortUrl;
+	export let hideOrigin = false;
 
 	const formatCount = (count: number) => {
 		const formatter = Intl.NumberFormat('en', { notation: 'compact' });
@@ -20,10 +21,12 @@
 			{href}
 			variant="link"
 			data-sveltekit-preload-data="off"
-			class="mx-auto flex items-center gap-1 px-1"
+			class="mx-auto flex w-full items-center justify-start gap-1 px-1"
 		>
 			<Link2 />
-			<p>{origin}<strong>{url.id}</strong></p>
+			<p>
+				<span class="text-primary/50">{hideOrigin ? '' : origin}</span><strong>{url.id}</strong>
+			</p>
 		</Button>
 		<p
 			class="flex aspect-square h-5 items-center justify-center rounded bg-primary-foreground px-1 text-sm font-bold text-primary"
