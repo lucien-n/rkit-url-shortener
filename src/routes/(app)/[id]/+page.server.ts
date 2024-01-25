@@ -1,4 +1,4 @@
-import { cacheUrl, getUrlFromCache } from '$lib/server/redis';
+import { cacheUrl, getUrl } from '$lib/server/data';
 import { UrlsController } from '$remult/url/url.controller';
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
@@ -6,11 +6,8 @@ import type { PageServerLoad } from './$types';
 export const load: PageServerLoad = async ({ params }) => {
 	const { id } = params;
 
-	let url = await getUrlFromCache(id);
-	if (!url) {
-		url = await UrlsController.findById(id);
-		if (!url) redirect(303, '/');
-
+	const url = await getUrl(id);
+	if (url) {
 		cacheUrl(url);
 	}
 
