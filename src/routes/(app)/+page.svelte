@@ -14,7 +14,7 @@
 	let shortenedUrl: ShortUrl | null = null;
 </script>
 
-<div class="absolute right-8 top-8">
+<div class="absolute right-5 top-5 hidden md:flex">
 	<MyUrls />
 </div>
 

@@ -24,7 +24,7 @@
 	});
 </script>
 
-<Card.Root class="min-w-96 ">
+<Card.Root class="min-w-96">
 	<Card.Header class="pb-2">
 		<Card.Title>Your urls</Card.Title>
 		<Card.Description>Urls created via this device</Card.Description>
