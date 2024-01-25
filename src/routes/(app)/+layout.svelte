@@ -3,7 +3,7 @@
 	import { titleStore } from '$lib/stores/title';
 	import { Toaster } from '$shadcn/sonner';
 	import { ModeWatcher } from 'mode-watcher';
-	import '../app.pcss';
+	import '../../app.pcss';
 </script>
 
 <svelte:head>
