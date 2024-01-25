@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-	<title>{$titleStore}</title>
+	<title>{'Shortenner' ?? $titleStore}</title>
 </svelte:head>
 
 <Toaster richColors />
