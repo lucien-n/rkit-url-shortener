@@ -7,12 +7,20 @@
 	import { Button } from '$shadcn/button';
 	import * as Dialog from '$shadcn/dialog';
 	import { ClipboardCopy } from 'radix-icons-svelte';
+	import { onMount } from 'svelte';
 	import { toast } from 'svelte-sonner';
+	import CustomToast from './custom-toast.svelte';
 
 	export let open = false;
 	export let url: ShortUrl;
 
 	let copySucceeded = false;
+
+	let shorturl = '';
+
+	onMount(() => {
+		browser ? window.location.origin + '/' + url?.id : 'no-url';
+	});
 </script>
 
 <Dialog.Root bind:open>
@@ -56,14 +64,22 @@
 				on:click={() => {
 					if (copySucceeded) return;
 					copyToClipboard(
-						url.url,
-						(message) => {
-							toast.success(message);
+						shorturl,
+						() => {
+							toast.error(CustomToast, {
+								componentProps: {
+									content: `Successfully copied <strong>${shorturl}</strong> to your clipboard`
+								}
+							});
 							copySucceeded = true;
 							setTimeout(() => (copySucceeded = false), 2000);
 						},
-						(message) => {
-							toast.error(message);
+						() => {
+							toast.error(CustomToast, {
+								componentProps: {
+									content: `Error while copying <strong>${shorturl}</strong> to your clipboard`
+								}
+							});
 							copySucceeded = false;
 						}
 					);
