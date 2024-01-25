@@ -2,7 +2,7 @@
 	import { browser } from '$app/environment';
 	import { PUBLIC_ORIGIN } from '$env/static/public';
 	import { getDaysBetweenDates } from '$lib/helpers';
-	import { copyToClipboard } from '$lib/utils';
+	import { copyToClipboard, stripProtocol } from '$lib/utils';
 	import { Expiration } from '$remult/short-url/enums/expiration.enum';
 	import type { ShortUrl } from '$remult/short-url/short-url.entity';
 	import { Button } from '$shadcn/button';
@@ -52,7 +52,7 @@
 				data-sveltekit-preload-data="off"
 			>
 				<p class="text-foreground/80">
-					{PUBLIC_ORIGIN}
+					{stripProtocol(PUBLIC_ORIGIN)}
 				</p>
 				<p class="font-bold">{url.id}</p>
 			</Button>

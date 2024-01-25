@@ -27,3 +27,5 @@ export const getUrlsIdsFromLocalStorage = (key = 'urls') => {
 	const validUrls = parsed.filter((id) => id.length === 6);
 	return validUrls;
 };
+
+export const stripProtocol = (url: string) => url.replace(/^(https?:\/\/)/, '');
