@@ -1,9 +1,12 @@
 export const copyToClipboard = (
 	content: string,
-	onSuccess: () => void = () => undefined,
-	onError: () => void = () => undefined
+	onSuccess: (message: string) => void = () => undefined,
+	onError: (message: string) => void = () => undefined
 ) => {
-	navigator.clipboard.writeText(content).then(onSuccess, onError);
+	navigator.clipboard.writeText(content).then(
+		() => onSuccess(`Successfully copied "${content}" to your clipboard`),
+		() => onError(`Error while copying "${content}" to your clipboard`)
+	);
 };
 
 export const addUrlIdToLocalStorage = (id: string, key = 'urls') => {

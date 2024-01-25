@@ -57,14 +57,14 @@
 					if (copySucceeded) return;
 					copyToClipboard(
 						url.url,
-						() => {
+						(message) => {
+							toast.success(message);
 							copySucceeded = true;
-							toast.success('Url copied to your clipboard successfully!');
 							setTimeout(() => (copySucceeded = false), 2000);
 						},
-						() => {
+						(message) => {
+							toast.error(message);
 							copySucceeded = false;
-							toast.error('An error occured while copying to your clipboard.');
 						}
 					);
 				}}

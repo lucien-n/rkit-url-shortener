@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
+	import { copyToClipboard } from '$lib/utils';
 	import type { ShortUrl } from '$remult/short-url/short-url.entity';
 	import { Button } from '$shadcn/button';
-	import { Link2 } from 'radix-icons-svelte';
+	import { Clipboard, Link2 } from 'radix-icons-svelte';
+	import { toast } from 'svelte-sonner';
 
 	export let url: ShortUrl;
 	export let hideOrigin = false;
@@ -33,6 +35,12 @@
 		>
 			{formatCount(url.redirects)}
 		</p>
+		<Button
+			class="flex aspect-square h-5 items-center justify-center rounded bg-primary-foreground px-1 text-sm font-bold text-primary"
+			on:click={() => copyToClipboard(href, toast.success, toast.error)}
+		>
+			<Clipboard />
+		</Button>
 	{:else}
 		<Button
 			variant="link"
