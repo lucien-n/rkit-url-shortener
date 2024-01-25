@@ -4,7 +4,9 @@
 	import { copyToClipboard, stripProtocol } from '$lib/utils';
 	import type { ShortUrl } from '$remult/short-url/short-url.entity';
 	import { Button } from '$shadcn/button';
-	import { Clipboard, Link2 } from 'radix-icons-svelte';
+	import * as Tooltip from '$shadcn/tooltip';
+	import moment from 'moment';
+	import { Clipboard, Link2, QuestionMark } from 'radix-icons-svelte';
 	import { toast } from 'svelte-sonner';
 	import CustomToast from './custom-toast.svelte';
 
@@ -57,6 +59,15 @@
 		>
 			<Clipboard />
 		</Button>
+		<Tooltip.Root>
+			<Tooltip.Trigger>
+				<QuestionMark />
+			</Tooltip.Trigger>
+			<Tooltip.Content class="text-center text-sm">
+				<p>Created {moment(url.createdAt).fromNow()}</p>
+				<p>Expires {moment(url.expiresAt).fromNow()}</p>
+			</Tooltip.Content>
+		</Tooltip.Root>
 	{:else}
 		<Button
 			variant="link"
