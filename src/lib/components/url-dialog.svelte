@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
+	import { PUBLIC_ORIGIN } from '$env/static/public';
 	import { getDaysBetweenDates } from '$lib/helpers';
 	import { copyToClipboard } from '$lib/utils';
 	import { Expiration } from '$remult/short-url/enums/expiration.enum';
@@ -51,7 +52,7 @@
 				data-sveltekit-preload-data="off"
 			>
 				<p class="text-foreground/80">
-					{browser ? window.location.origin : 'origin'}/
+					{PUBLIC_ORIGIN}
 				</p>
 				<p class="font-bold">{url.id}</p>
 			</Button>

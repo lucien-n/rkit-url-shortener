@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
+	import { PUBLIC_ORIGIN } from '$env/static/public';
 	import { copyToClipboard } from '$lib/utils';
 	import type { ShortUrl } from '$remult/short-url/short-url.entity';
 	import { Button } from '$shadcn/button';
@@ -17,8 +18,7 @@
 
 <div class="flex flex-row items-center gap-1">
 	{#if browser}
-		{@const origin = browser ? window.location.origin + '/' : ''}
-		{@const href = origin ? origin + url.id : 'error'}
+		{@const href = PUBLIC_ORIGIN + url.id}
 		<Button
 			{href}
 			variant="link"
@@ -27,7 +27,7 @@
 		>
 			<Link2 />
 			<p>
-				<span class="text-primary/50">{origin}</span><strong>{url.id}</strong>
+				<span class="text-primary/50">{PUBLIC_ORIGIN}</span><strong>{url.id}</strong>
 			</p>
 		</Button>
 		<p
