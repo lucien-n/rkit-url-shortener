@@ -1,4 +1,5 @@
-import { cacheUrl, redis } from '$lib/server/redis';
+import { cacheUrl } from '$lib/server/data';
+import { redis } from '$lib/server/redis';
 import { superFormAction } from '$lib/server/super-utils';
 import { createUrlSchema } from '$remult/url/inputs/create-url-input';
 import { UrlsController } from '$remult/url/url.controller';

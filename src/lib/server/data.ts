@@ -2,8 +2,10 @@ import { UrlsController } from '$remult/url/url.controller';
 import type { Url } from '$remult/url/url.entity';
 import { redis } from './redis';
 
+const REDIS_URL_KEY = 'url';
+
 const getUrlFromCache = async (id: string) => {
-	const cached = await redis.get(`url:${id}`);
+	const cached = await redis.get(`${REDIS_URL_KEY}:${id}`);
 	if (cached) {
 		return JSON.parse(cached);
 	}
@@ -24,7 +26,7 @@ export const getUrl = async (id: string, bypassCache = false) => {
 const getUrlsFromCache = async (ids: string[]) => {
 	const urls: Url[] = [];
 	for (const id of ids) {
-		const cached = await redis.get(`url:${id}`);
+		const cached = await redis.get(`${REDIS_URL_KEY}:${id}`);
 		if (cached) {
 			const parsed = JSON.parse(cached);
 			urls.push(parsed);
@@ -35,7 +37,7 @@ const getUrlsFromCache = async (ids: string[]) => {
 };
 
 export const getUrls = async (ids: string[], bypassCache = false) => {
-	if (ids.length > 20) throw Error('Too many ids (>=20)');
+	if (ids.length > 20) throw Error('Too many (20 >= ids)');
 
 	const urls: Url[] = [];
 	let remainingIds = ids;
@@ -50,4 +52,17 @@ export const getUrls = async (ids: string[], bypassCache = false) => {
 
 	const dbUrls = await UrlsController.findByIds(remainingIds);
 	return urls.concat(dbUrls);
+};
+
+export const cacheUrl = async (url: Url) => {
+	const redisKey = `${REDIS_URL_KEY}:${url.id}`;
+	await redis.set(redisKey, JSON.stringify(url), 'EX', 600);
+};
+
+export const cacheUrls = async (urls: Url[]) => {
+	if (urls.length > 20) throw Error('Too many urls (20 >= urls)');
+
+	for (const url of urls) {
+		await cacheUrl(url);
+	}
 };
