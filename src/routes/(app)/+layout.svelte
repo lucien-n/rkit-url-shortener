@@ -1,5 +1,5 @@
 <script>
-	import LightSwitch from '$lib/components/light-switch.svelte';
+	import Nav from '$lib/components/nav.svelte';
 	import { titleStore } from '$lib/stores/title';
 	import { Toaster } from '$shadcn/sonner';
 	import { ModeWatcher } from 'mode-watcher';
@@ -15,7 +15,7 @@
 
 <div class="h-full w-full font-mono">
 	<div class="absolute m-3">
-		<LightSwitch />
+		<Nav />
 	</div>
 
 	<main class="container h-full">

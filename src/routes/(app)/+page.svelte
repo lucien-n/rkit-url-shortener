@@ -1,6 +1,5 @@
 <script lang="ts">
 	import MostViewed from '$lib/components/most-viewed.svelte';
-	import MyUrls from '$lib/components/my-urls.svelte';
 	import UrlDialog from '$lib/components/url-dialog.svelte';
 	import UrlForm from '$lib/components/url-form.svelte';
 	import { addUrlIdToLocalStorage } from '$lib/utils';
@@ -13,10 +12,6 @@
 	let showSuccessDialog = false;
 	let shortenedUrl: ShortUrl | null = null;
 </script>
-
-<div class="absolute right-5 top-5 hidden md:flex">
-	<MyUrls />
-</div>
 
 <div class="mx-auto grid min-h-screen w-full max-w-2xl grid-rows-3 flex-col items-center space-y-8">
 	<div class="self-end">
