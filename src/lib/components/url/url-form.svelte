@@ -1,12 +1,11 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { cn } from '$lib/shadcn/utils';
 	import { Expiration } from '$remult/short-url/enums/expiration.enum';
 	import { createShortUrlSchema } from '$remult/short-url/inputs/create-short-url-input';
 	import rules from '$remult/short-url/short-url.rules';
 	import * as Form from '$shadcn/form';
 	import type { SubmitFunction } from '@sveltejs/kit';
-	import { Link2, Rocket } from 'radix-icons-svelte';
+	import { Link2 } from 'radix-icons-svelte';
 	import { createEventDispatcher } from 'svelte';
 	import type { SuperValidated } from 'sveltekit-superforms';
 
@@ -94,32 +93,26 @@
 			</Form.Item>
 		</Form.Field>
 		<br />
-		<input type="checkbox" bind:checked={loading} />
 		<Form.Button
-			class=" flex w-full gap-1 overflow-hidden py-6 text-2xl font-bold tracking-tight text-primary-foreground transition-all duration-300 ease-in-out"
+			class=" flex w-full gap-2 overflow-hidden py-6 text-2xl font-bold tracking-tight text-primary-foreground transition-all duration-300 ease-in-out"
 			disabled={loading}
 		>
-			<Link2 size="24" />
-			{loading ? 'Shortening' : 'Shorten'}
-
-			<div class={cn('ml-5 hidden overflow-hidden', loading && 'animate-rocket flex')}>
-				<Rocket class="h-[1.5rem] w-[1.5rem]" />
+			<div class:animate-loading={loading}>
+				<Link2 size="24" />
 			</div>
+			{loading ? 'Shortening' : 'Shorten'}
 		</Form.Button>
 	</form>
 </Form.Root>
 
 <style>
-	.animate-rocket {
-		animation: rocket 1.5s cubic-bezier(0.75, 0, 0.25, 1) infinite;
+	@keyframes loading {
+		to {
+			transform: rotate(360deg);
+		}
 	}
 
-	@keyframes rocket {
-		0% {
-			transform: translate(-150%, 150%);
-		}
-		100% {
-			transform: translate(250%, -250%);
-		}
+	.animate-loading {
+		animation: loading 1.15s ease-in-out infinite;
 	}
 </style>
