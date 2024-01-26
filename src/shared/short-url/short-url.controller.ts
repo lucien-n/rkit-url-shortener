@@ -64,7 +64,7 @@ export class ShortUrlsController {
 	static async deleteExpired() {
 		for await (const url of remult
 			.repo(ShortUrl)
-			.query({ where: { expiresAt: { $gte: new Date() } } })) {
+			.query({ where: { expiresAt: { $lte: new Date() } } })) {
 			console.log(`Deleting "${url.id}" because it expired ${moment(url.expiresAt).fromNow()}`);
 			remult.repo(ShortUrl).delete(url);
 		}
