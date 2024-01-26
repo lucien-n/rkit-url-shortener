@@ -9,7 +9,7 @@
 	import moment from 'moment';
 	import { Clipboard, Link2, Star, StarFilled } from 'radix-icons-svelte';
 	import { toast } from 'svelte-sonner';
-	import CustomToast from './custom-toast.svelte';
+	import CustomToast from '../custom-toast.svelte';
 
 	export let url: ShortUrl;
 

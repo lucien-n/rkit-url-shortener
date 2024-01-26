@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { Moon, Sun } from 'radix-icons-svelte';
 
+	import NavButton from '$lib/components/nav/nav-button.svelte';
 	import { toggleMode } from 'mode-watcher';
-	import NavButton from './nav-button.svelte';
 </script>
 
 <NavButton on:click={toggleMode}>

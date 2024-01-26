@@ -1,4 +1,6 @@
 <script lang="ts">
+	import NavButton from '$lib/components/nav/nav-button.svelte';
+	import UrlLink from '$lib/components/url/url-link.svelte';
 	import { favoritesStore } from '$lib/stores';
 	import type { ShortUrl } from '$remult/short-url/short-url.entity';
 	import { Button } from '$shadcn/button';
@@ -6,8 +8,6 @@
 	import * as Popover from '$shadcn/popover';
 	import { CaretSort, Star } from 'radix-icons-svelte';
 	import { onDestroy, onMount } from 'svelte';
-	import NavButton from './nav-button.svelte';
-	import UrlLink from './url-link.svelte';
 
 	let urls: ShortUrl[] = [];
 	let unsubscribe: (() => void) | null = null;

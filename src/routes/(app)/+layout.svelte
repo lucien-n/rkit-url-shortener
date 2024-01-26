@@ -1,5 +1,5 @@
 <script>
-	import Nav from '$lib/components/nav.svelte';
+	import Nav from '$lib/components/nav/nav.svelte';
 	import { titleStore } from '$lib/stores/title';
 	import { Toaster } from '$shadcn/sonner';
 	import { ModeWatcher } from 'mode-watcher';

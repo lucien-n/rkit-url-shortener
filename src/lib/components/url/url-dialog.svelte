@@ -10,7 +10,7 @@
 	import { ClipboardCopy } from 'radix-icons-svelte';
 	import { onMount } from 'svelte';
 	import { toast } from 'svelte-sonner';
-	import CustomToast from './custom-toast.svelte';
+	import CustomToast from '../custom-toast.svelte';
 
 	export let open = false;
 	export let url: ShortUrl;

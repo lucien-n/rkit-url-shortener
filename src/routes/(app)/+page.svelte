@@ -1,7 +1,7 @@
 <script lang="ts">
 	import MostViewed from '$lib/components/most-viewed.svelte';
-	import UrlDialog from '$lib/components/url-dialog.svelte';
-	import UrlForm from '$lib/components/url-form.svelte';
+	import UrlDialog from '$lib/components/url/url-dialog.svelte';
+	import UrlForm from '$lib/components/url/url-form.svelte';
 	import { urlsStore } from '$lib/stores';
 	import type { ShortUrl } from '$remult/short-url/short-url.entity';
 	import { toast } from 'svelte-sonner';
