@@ -15,7 +15,9 @@
 
 <div class="mx-auto grid min-h-screen w-full max-w-2xl grid-rows-3 flex-col items-center space-y-8">
 	<div class="self-end">
-		<h2 class="mt-6 text-center text-7xl font-extrabold text-gray-900 dark:text-gray-100">
+		<h2
+			class="mt-6 text-center text-4xl font-extrabold text-gray-900 dark:text-gray-100 sm:text-7xl"
+		>
 			URL Shortener
 		</h2>
 		<p class="text-md mt-2 text-center text-gray-600 dark:text-gray-400">

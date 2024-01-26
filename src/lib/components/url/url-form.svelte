@@ -57,11 +57,11 @@
 				<Form.Select selected={expirationSelectOptions[2]}>
 					<div class="flex">
 						<div
-							class="select-none self-center rounded-md rounded-r-none border border-r-0 bg-muted px-3 py-[.312rem]"
+							class="hidden select-none self-center rounded-md rounded-r-none border border-r-0 bg-muted px-3 py-[.312rem] md:flex"
 						>
 							Expiration
 						</div>
-						<Form.SelectTrigger class="rounded-l-none" placeholder="Expiration" />
+						<Form.SelectTrigger class="md:rounded-l-none" placeholder="Expiration" />
 						<Form.SelectContent>
 							{#each expirationSelectOptions as { value, label } (value)}
 								<Form.SelectItem {label} {value}>
@@ -84,7 +84,7 @@
 				<Form.Validation />
 				<Form.Input
 					type="text"
-					class="p-6 text-xl"
+					class="text-lg md:p-6 md:text-xl"
 					placeholder="https://my-long-url.site"
 					minlength={rules.url.min}
 					maxlength={rules.url.max}

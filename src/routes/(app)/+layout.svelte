@@ -18,7 +18,7 @@
 		<Nav />
 	</div>
 
-	<main class="container h-full">
+	<main class="mx-2 h-full md:container">
 		<slot />
 	</main>
 </div>
