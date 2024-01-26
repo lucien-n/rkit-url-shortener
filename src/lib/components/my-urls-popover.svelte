@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { urlsStore } from '$lib/stores';
 	import type { ShortUrl } from '$remult/short-url/short-url.entity';
+	import { Button } from '$shadcn/button';
+	import * as Collapsible from '$shadcn/collapsible';
 	import * as Popover from '$shadcn/popover';
-	import { Separator } from '$shadcn/separator';
-	import { CounterClockwiseClock } from 'radix-icons-svelte';
+	import { CaretSort, CounterClockwiseClock } from 'radix-icons-svelte';
 	import { onDestroy, onMount } from 'svelte';
 	import NavButton from './nav-button.svelte';
 	import UrlLink from './url-link.svelte';
@@ -44,19 +45,36 @@
 		</NavButton>
 	</Popover.Trigger>
 	<Popover.Content class="m-1 min-w-96 space-y-3 font-mono">
-		<div class="flex flex-col gap-1">
-			<p class="font-semibold leading-none tracking-tight">Your urls</p>
-			<p class="text-sm text-muted-foreground">Urls created via this device</p>
-		</div>
-		<Separator />
-		<div>
+		<Collapsible.Root class="space-y-2">
+			<div class="flex items-center justify-between">
+				<h4 class="text-sm font-semibold">Urls created via this device ({urls.length})</h4>
+				<Collapsible.Trigger asChild let:builder>
+					<Button builders={[builder]} variant="ghost" size="sm" class="w-9 p-0">
+						<CaretSort class="h-6 w-6" />
+						<span class="sr-only">Toggle</span>
+					</Button>
+				</Collapsible.Trigger>
+			</div>
 			{#if urls.length}
-				{#each urls as url}
-					<UrlLink {url} />
+				{#each urls.slice(0, 3) as url}
+					<div class="rounded border px-2">
+						<UrlLink {url} />
+					</div>
 				{/each}
+				<Collapsible.Content class="space-y-2">
+					{#if urls.length > 3}
+						{#each urls.slice(3) as url}
+							<div class="rounded border px-2">
+								<UrlLink {url} />
+							</div>
+						{/each}
+					{:else}
+						<p class="px-1">No more urls!</p>
+					{/if}
+				</Collapsible.Content>
 			{:else}
 				<p>No urls!</p>
 			{/if}
-		</div>
+		</Collapsible.Root>
 	</Popover.Content>
 </Popover.Root>
