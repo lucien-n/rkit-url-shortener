@@ -1,29 +1,17 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import CustomToast from '$comp/custom-toast.svelte';
 	import { PUBLIC_ORIGIN } from '$env/static/public';
-	import { favoritesStore } from '$lib/stores';
-	import { copyToClipboard, stripProtocol } from '$lib/utils';
+	import { stripProtocol } from '$lib/utils';
 	import type { ShortUrl } from '$remult/short-url/short-url.entity';
 	import { Button } from '$shadcn/button';
 	import * as Tooltip from '$shadcn/tooltip';
 	import moment from 'moment';
-	import { Clipboard, Link2, Star, StarFilled } from 'radix-icons-svelte';
-	import { toast } from 'svelte-sonner';
+	import { Link2 } from 'radix-icons-svelte';
+	import CopyToClipboard from './actions/copy-to-clipboard.svelte';
+	import Favorite from './actions/favorite.svelte';
+	import RedirectCount from './actions/redirect-count.svelte';
 
 	export let url: ShortUrl;
-
-	$: isFavorite = $favoritesStore.includes(url.id);
-
-	const formatCount = (count: number) => {
-		const formatter = Intl.NumberFormat('en', { notation: 'compact' });
-		return formatter.format(count);
-	};
-
-	const toggleFavorite = () => {
-		if (isFavorite) favoritesStore.remove([url.id]);
-		else favoritesStore.add([url.id]);
-	};
 
 	const willExpire = (): boolean =>
 		new Date(url.expiresAt).getUTCFullYear() > new Date().getUTCFullYear() + 10;
@@ -50,49 +38,13 @@
 			</Tooltip.Trigger>
 			<Tooltip.Content class="text-foreground-muted bg-secondary text-sm">
 				<p>Created {moment(url.createdAt).fromNow()}</p>
-
 				<p>{willExpire() ? 'Never expires' : `Expires ${moment(url.expiresAt).fromNow()}`}</p>
 			</Tooltip.Content>
 		</Tooltip.Root>
 		<div class="flex justify-end gap-1">
-			<p
-				class="flex aspect-square h-5 items-center justify-center rounded bg-primary-foreground px-1 text-sm font-bold text-primary"
-			>
-				{formatCount(url.redirects)}
-			</p>
-			<Button
-				variant="secondary"
-				class="flex aspect-square h-5 w-5 items-center justify-center rounded px-1 text-sm font-bold"
-				on:click={() =>
-					copyToClipboard(
-						href,
-						() =>
-							toast.success(CustomToast, {
-								componentProps: {
-									content: `Successfully copied <strong>${href}</strong> to your clipboard`
-								}
-							}),
-						() =>
-							toast.error(CustomToast, {
-								componentProps: {
-									content: `Error while copying <strong>${href}</strong> to your clipboard`
-								}
-							})
-					)}
-			>
-				<Clipboard />
-			</Button>
-			<Button
-				variant="secondary"
-				class="flex aspect-square h-5 w-5 items-center justify-center rounded px-1 text-sm font-bold"
-				on:click={toggleFavorite}
-			>
-				{#if isFavorite}
-					<StarFilled />
-				{:else}
-					<Star />
-				{/if}
-			</Button>
+			<RedirectCount redirects={url.redirects} />
+			<CopyToClipboard {href} />
+			<Favorite id={url.id} />
 		</div>
 	{:else}
 		<Button
