@@ -16,7 +16,9 @@ export class ShortUrlsController {
 
 	@BackendMethod({ allowed: false })
 	static findByIds(ids: string[]) {
-		return remult.repo(ShortUrl).find({ where: { id: { $in: ids } } });
+		return remult
+			.repo(ShortUrl)
+			.find({ where: { id: { $in: ids } }, orderBy: { createdAt: 'desc' } });
 	}
 
 	@BackendMethod({ allowed: false })
