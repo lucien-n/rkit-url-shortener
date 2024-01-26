@@ -1,29 +1,19 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { PUBLIC_ORIGIN } from '$env/static/public';
-	import {
-		addUrlIdToLocalStorage,
-		copyToClipboard,
-		getUrlsIdsFromLocalStorage,
-		removeUrlIdFromLocalStorage,
-		stripProtocol
-	} from '$lib/utils';
+	import { favoritesStore } from '$lib/stores';
+	import { copyToClipboard, stripProtocol } from '$lib/utils';
 	import type { ShortUrl } from '$remult/short-url/short-url.entity';
 	import { Button } from '$shadcn/button';
 	import * as Tooltip from '$shadcn/tooltip';
 	import moment from 'moment';
 	import { Clipboard, Link2, Star, StarFilled } from 'radix-icons-svelte';
-	import { onMount } from 'svelte';
 	import { toast } from 'svelte-sonner';
 	import CustomToast from './custom-toast.svelte';
 
 	export let url: ShortUrl;
 
-	let isFavorite = false;
-
-	onMount(() => {
-		isFavorite = getUrlsIdsFromLocalStorage('favorites').includes(url.id);
-	});
+	$: isFavorite = $favoritesStore.includes(url.id);
 
 	const formatCount = (count: number) => {
 		const formatter = Intl.NumberFormat('en', { notation: 'compact' });
@@ -31,13 +21,8 @@
 	};
 
 	const toggleFavorite = () => {
-		if (isFavorite) {
-			removeUrlIdFromLocalStorage(url.id, 'favorites');
-			isFavorite = false;
-		} else {
-			addUrlIdToLocalStorage(url.id, 'favorites');
-			isFavorite = true;
-		}
+		if (isFavorite) favoritesStore.update((current) => current.filter((id) => id !== url.id));
+		else favoritesStore.update((current) => [...new Set(current), url.id]);
 	};
 </script>
 

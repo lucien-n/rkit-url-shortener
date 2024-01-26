@@ -1,24 +1,29 @@
 <script lang="ts">
-	import { getUrlsIdsFromLocalStorage } from '$lib/utils';
+	import { favoritesStore } from '$lib/stores';
 	import type { ShortUrl } from '$remult/short-url/short-url.entity';
 	import { Button } from '$shadcn/button';
 	import * as Popover from '$shadcn/popover';
 	import { Separator } from '$shadcn/separator';
 	import { StarFilled } from 'radix-icons-svelte';
-	import { onMount } from 'svelte';
 	import UrlLink from './url-link.svelte';
 
 	let urls: ShortUrl[] = [];
 
-	onMount(async () => {
-		const localUrlsIds = getUrlsIdsFromLocalStorage('favorites');
+	favoritesStore.subscribe(async (favoritesIds) => {
+		urls = urls.filter(({ id }) => favoritesIds.includes(id));
+
+		const urlsIdsToFetch = favoritesIds.filter(
+			(favoriteId) => !urls.some(({ id }) => id === favoriteId)
+		);
 		const fetchUrl = new URL(window.location.origin + '/api/urls');
-		fetchUrl.searchParams.set('ids', JSON.stringify(localUrlsIds));
+		fetchUrl.searchParams.set('ids', JSON.stringify(urlsIdsToFetch));
 
 		try {
 			const res = await fetch(fetchUrl);
 			const data = await res.json();
-			if (typeof data === 'object' && data.length) urls = data;
+			if (typeof data === 'object' && data.length) {
+				urls = [...urls, ...data];
+			}
 		} catch (e) {
 			urls = [];
 		}
