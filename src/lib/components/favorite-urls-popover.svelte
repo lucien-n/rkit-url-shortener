@@ -5,29 +5,35 @@
 	import * as Popover from '$shadcn/popover';
 	import { Separator } from '$shadcn/separator';
 	import { StarFilled } from 'radix-icons-svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import UrlLink from './url-link.svelte';
 
 	let urls: ShortUrl[] = [];
+	let unsubscribe: (() => void) | null = null;
 
-	favoritesStore.subscribe(async (favoritesIds) => {
-		urls = urls.filter(({ id }) => favoritesIds.includes(id));
+	onMount(() => {
+		unsubscribe = favoritesStore.subscribe(async (favoritesIds) => {
+			urls = urls.filter(({ id }) => favoritesIds.includes(id));
 
-		const urlsIdsToFetch = favoritesIds.filter(
-			(favoriteId) => !urls.some(({ id }) => id === favoriteId)
-		);
-		const fetchUrl = new URL(window.location.origin + '/api/urls');
-		fetchUrl.searchParams.set('ids', JSON.stringify(urlsIdsToFetch));
+			const urlsIdsToFetch = favoritesIds.filter(
+				(favoriteId) => !urls.some(({ id }) => id === favoriteId)
+			);
+			const fetchUrl = new URL(window.location.origin + '/api/urls');
+			fetchUrl.searchParams.set('ids', JSON.stringify(urlsIdsToFetch));
 
-		try {
-			const res = await fetch(fetchUrl);
-			const data = await res.json();
-			if (typeof data === 'object' && data.length) {
-				urls = [...urls, ...data];
+			try {
+				const res = await fetch(fetchUrl);
+				const data = await res.json();
+				if (typeof data === 'object' && data.length) {
+					urls = [...urls, ...data];
+				}
+			} catch (e) {
+				urls = [];
 			}
-		} catch (e) {
-			urls = [];
-		}
+		});
 	});
+
+	onDestroy(() => unsubscribe?.());
 </script>
 
 <Popover.Root>

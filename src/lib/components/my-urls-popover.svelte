@@ -1,28 +1,39 @@
 <script lang="ts">
-	import { getUrlsIdsFromLocalStorage } from '$lib/utils';
+	import { urlsStore } from '$lib/stores';
 	import type { ShortUrl } from '$remult/short-url/short-url.entity';
 	import { Button } from '$shadcn/button';
 	import * as Popover from '$shadcn/popover';
 	import { Separator } from '$shadcn/separator';
 	import { CounterClockwiseClock } from 'radix-icons-svelte';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import UrlLink from './url-link.svelte';
 
 	let urls: ShortUrl[] = [];
+	let unsubscribe: (() => void) | null = null;
 
-	onMount(async () => {
-		const localUrlsIds = getUrlsIdsFromLocalStorage();
-		const fetchUrl = new URL(window.location.origin + '/api/urls');
-		fetchUrl.searchParams.set('ids', JSON.stringify(localUrlsIds));
+	onMount(() => {
+		unsubscribe = urlsStore.subscribe(async (urlsIds) => {
+			urls = urls.filter(({ id }) => urlsIds.includes(id));
 
-		try {
-			const res = await fetch(fetchUrl);
-			const data = await res.json();
-			if (typeof data === 'object' && data.length) urls = data;
-		} catch (e) {
-			urls = [];
-		}
+			const urlsIdsToFetch = urlsIds.filter(
+				(favoriteId) => !urls.some(({ id }) => id === favoriteId)
+			);
+			const fetchUrl = new URL(window.location.origin + '/api/urls');
+			fetchUrl.searchParams.set('ids', JSON.stringify(urlsIdsToFetch));
+
+			try {
+				const res = await fetch(fetchUrl);
+				const data = await res.json();
+				if (typeof data === 'object' && data.length) {
+					urls = [...urls, ...data];
+				}
+			} catch (e) {
+				urls = [];
+			}
+		});
 	});
+
+	onDestroy(() => unsubscribe?.());
 </script>
 
 <Popover.Root>

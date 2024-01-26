@@ -2,7 +2,7 @@
 	import MostViewed from '$lib/components/most-viewed.svelte';
 	import UrlDialog from '$lib/components/url-dialog.svelte';
 	import UrlForm from '$lib/components/url-form.svelte';
-	import { addUrlIdToLocalStorage } from '$lib/utils';
+	import { urlsStore } from '$lib/stores';
 	import type { ShortUrl } from '$remult/short-url/short-url.entity';
 	import { toast } from 'svelte-sonner';
 	import type { PageData } from './$types';
@@ -29,7 +29,8 @@
 				shortenedUrl = detail.data.shortenedUrl;
 				showSuccessDialog = true;
 
-				if (shortenedUrl) addUrlIdToLocalStorage(shortenedUrl.id);
+				if (shortenedUrl)
+					urlsStore.update((current) => [...new Set([...current, shortenedUrl.id])]);
 			}}
 			on:failure={() => {
 				toast.error('An error occured, please try again later');
