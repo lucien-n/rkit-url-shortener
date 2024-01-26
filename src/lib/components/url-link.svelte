@@ -50,7 +50,7 @@
 				<p>Expires {moment(url.expiresAt).fromNow()}</p>
 			</Tooltip.Content>
 		</Tooltip.Root>
-		<div class="flex gap-1">
+		<div class="flex justify-end gap-1">
 			<p
 				class="flex aspect-square h-5 items-center justify-center rounded bg-primary-foreground px-1 text-sm font-bold text-primary"
 			>
