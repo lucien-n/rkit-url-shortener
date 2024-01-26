@@ -1,5 +1,6 @@
 import { generateId, parseZInputs } from '$remult/helpers';
 import { getExpiresAt as getExpiration } from '$remult/helpers/url';
+import moment from 'moment';
 import { BackendMethod, Controller, remult } from 'remult';
 import { createShortUrlSchema, type CreateShortUrlInput } from './inputs/create-short-url-input';
 import { ShortUrl } from './short-url.entity';
@@ -57,5 +58,15 @@ export class ShortUrlsController {
 				...url
 			})
 		);
+	}
+
+	@BackendMethod({ allowed: false })
+	static async deleteExpired() {
+		for await (const url of remult
+			.repo(ShortUrl)
+			.query({ where: { expiresAt: { $gte: new Date() } } })) {
+			console.log(`Deleting "${url.id}" because it expired ${moment(url.expiresAt).fromNow()}`);
+			remult.repo(ShortUrl).delete(url);
+		}
 	}
 }
