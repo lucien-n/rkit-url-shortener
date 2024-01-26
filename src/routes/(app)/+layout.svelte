@@ -13,6 +13,9 @@
 		property="og:image"
 		content="blob:https://vercel.com/32608795-afec-4896-b74d-bfaeee6f1797"
 	/>
+	<meta property="og:title" content="Shortenner" />
+	<meta property="og:description" content="Quickly shorten and share your urls" />
+	<meta property="og:url" content="https://shortenner.lucienn.dev" />
 </svelte:head>
 
 <Toaster richColors />
