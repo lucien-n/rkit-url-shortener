@@ -14,7 +14,8 @@ const config = {
 		adapter: adapter(),
 		alias: {
 			$shadcn: './src/lib/shadcn/components/ui',
-			$remult: './src/shared'
+			$remult: './src/shared',
+			$comp: './src/lib/components'
 		}
 	}
 };

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import NavButton from '$lib/components/nav/nav-button.svelte';
-	import UrlLink from '$lib/components/url/url-link.svelte';
+	import NavButton from '$comp/nav/nav-button.svelte';
+	import UrlLink from '$comp/url/link/url-link.svelte';
 	import { urlsStore } from '$lib/stores';
 	import type { ShortUrl } from '$remult/short-url/short-url.entity';
 	import { Button } from '$shadcn/button';

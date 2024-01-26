@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
+	import CustomToast from '$comp/custom-toast.svelte';
 	import { PUBLIC_ORIGIN } from '$env/static/public';
 	import { favoritesStore } from '$lib/stores';
 	import { copyToClipboard, stripProtocol } from '$lib/utils';
@@ -9,7 +10,6 @@
 	import moment from 'moment';
 	import { Clipboard, Link2, Star, StarFilled } from 'radix-icons-svelte';
 	import { toast } from 'svelte-sonner';
-	import CustomToast from '../custom-toast.svelte';
 
 	export let url: ShortUrl;
 

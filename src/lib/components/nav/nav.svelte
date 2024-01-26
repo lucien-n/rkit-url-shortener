@@ -1,7 +1,7 @@
 <script lang="ts">
-	import FavoriteUrlsPopover from '$lib/components/nav/favorite-urls-popover.svelte';
-	import LightSwitch from '$lib/components/nav/light-switch.svelte';
-	import MyUrlsPopover from '$lib/components/nav/my-urls-popover.svelte';
+	import FavoriteUrlsPopover from '$comp/nav/favorite-urls-popover.svelte';
+	import LightSwitch from '$comp/nav/light-switch.svelte';
+	import MyUrlsPopover from '$comp/nav/my-urls-popover.svelte';
 </script>
 
 <nav class="flex flex-col gap-3">

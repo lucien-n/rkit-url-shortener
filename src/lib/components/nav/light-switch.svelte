@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Moon, Sun } from 'radix-icons-svelte';
 
-	import NavButton from '$lib/components/nav/nav-button.svelte';
+	import NavButton from '$comp/nav/nav-button.svelte';
 	import { toggleMode } from 'mode-watcher';
 </script>
 

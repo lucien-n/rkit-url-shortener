@@ -1,5 +1,5 @@
 <script lang="ts">
-	import UrlLink from '$lib/components/url/url-link.svelte';
+	import UrlLink from '$comp/url/link/url-link.svelte';
 	import { cn } from '$lib/shadcn/utils';
 	import type { ShortUrl } from '$remult/short-url/short-url.entity';
 
