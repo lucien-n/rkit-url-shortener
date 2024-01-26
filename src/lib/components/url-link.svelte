@@ -21,8 +21,8 @@
 	};
 
 	const toggleFavorite = () => {
-		if (isFavorite) favoritesStore.add([url.id]);
-		else favoritesStore.remove([url.id]);
+		if (isFavorite) favoritesStore.remove([url.id]);
+		else favoritesStore.add([url.id]);
 	};
 </script>
 
