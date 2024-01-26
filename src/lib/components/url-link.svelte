@@ -6,7 +6,7 @@
 	import { Button } from '$shadcn/button';
 	import * as Tooltip from '$shadcn/tooltip';
 	import moment from 'moment';
-	import { Clipboard, Link2, QuestionMark } from 'radix-icons-svelte';
+	import { Clipboard, Link2 } from 'radix-icons-svelte';
 	import { toast } from 'svelte-sonner';
 	import CustomToast from './custom-toast.svelte';
 
@@ -21,17 +21,27 @@
 <div class="flex flex-row items-center gap-1">
 	{#if browser}
 		{@const href = PUBLIC_ORIGIN + url.id}
-		<Button
-			{href}
-			variant="link"
-			data-sveltekit-preload-data="off"
-			class="mx-auto flex w-full items-center justify-start gap-1 px-1"
-		>
-			<Link2 />
-			<p>
-				<span class="text-primary/50">{stripProtocol(PUBLIC_ORIGIN)}</span><strong>{url.id}</strong>
-			</p>
-		</Button>
+		<Tooltip.Root>
+			<Tooltip.Trigger>
+				<Button
+					{href}
+					variant="link"
+					data-sveltekit-preload-data="off"
+					class="mx-auto flex w-full items-center justify-start gap-1 px-1"
+				>
+					<Link2 />
+					<p>
+						<span class="text-primary/50">{stripProtocol(PUBLIC_ORIGIN)}</span><strong
+							>{url.id}</strong
+						>
+					</p>
+				</Button>
+			</Tooltip.Trigger>
+			<Tooltip.Content class="text-foreground-muted bg-secondary text-sm">
+				<p>Created {moment(url.createdAt).fromNow()}</p>
+				<p>Expires {moment(url.expiresAt).fromNow()}</p>
+			</Tooltip.Content>
+		</Tooltip.Root>
 		<p
 			class="flex aspect-square h-5 items-center justify-center rounded bg-primary-foreground px-1 text-sm font-bold text-primary"
 		>
@@ -59,15 +69,6 @@
 		>
 			<Clipboard />
 		</Button>
-		<Tooltip.Root>
-			<Tooltip.Trigger>
-				<QuestionMark />
-			</Tooltip.Trigger>
-			<Tooltip.Content class="text-center text-sm">
-				<p>Created {moment(url.createdAt).fromNow()}</p>
-				<p>Expires {moment(url.expiresAt).fromNow()}</p>
-			</Tooltip.Content>
-		</Tooltip.Root>
 	{:else}
 		<Button
 			variant="link"
