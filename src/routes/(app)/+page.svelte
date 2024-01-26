@@ -29,8 +29,7 @@
 				shortenedUrl = detail.data.shortenedUrl;
 				showSuccessDialog = true;
 
-				if (shortenedUrl)
-					urlsStore.update((current) => [...new Set([...current, shortenedUrl.id])]);
+				if (shortenedUrl) urlsStore.add([shortenedUrl.id]);
 			}}
 			on:failure={() => {
 				toast.error('An error occured, please try again later');

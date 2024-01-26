@@ -21,8 +21,8 @@
 	};
 
 	const toggleFavorite = () => {
-		if (isFavorite) favoritesStore.update((current) => current.filter((id) => id !== url.id));
-		else favoritesStore.update((current) => [...new Set(current), url.id]);
+		if (isFavorite) favoritesStore.add([url.id]);
+		else favoritesStore.remove([url.id]);
 	};
 </script>
 
