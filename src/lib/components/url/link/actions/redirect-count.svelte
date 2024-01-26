@@ -15,7 +15,7 @@
 		<Button
 			variant="ghost"
 			builders={[builder]}
-			class="flex aspect-square h-5 cursor-default select-text items-center justify-center rounded bg-primary-foreground px-1 text-sm font-bold text-primary hover:bg-primary/30"
+			class="flex h-5 min-w-5 cursor-default select-text items-center justify-center rounded bg-primary-foreground px-1 text-sm font-bold text-primary hover:bg-primary/30"
 		>
 			{formatCount(redirects)}
 		</Button>
