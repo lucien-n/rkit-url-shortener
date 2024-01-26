@@ -24,6 +24,9 @@
 		if (isFavorite) favoritesStore.remove([url.id]);
 		else favoritesStore.add([url.id]);
 	};
+
+	const willExpire = (): boolean =>
+		new Date(url.expiresAt).getUTCFullYear() > new Date().getUTCFullYear() + 10;
 </script>
 
 <div class="flex w-full flex-row items-center justify-between gap-1">
@@ -47,7 +50,8 @@
 			</Tooltip.Trigger>
 			<Tooltip.Content class="text-foreground-muted bg-secondary text-sm">
 				<p>Created {moment(url.createdAt).fromNow()}</p>
-				<p>Expires {moment(url.expiresAt).fromNow()}</p>
+
+				<p>{willExpire() ? 'Never expires' : `Expires ${moment(url.expiresAt).fromNow()}`}</p>
 			</Tooltip.Content>
 		</Tooltip.Root>
 		<div class="flex justify-end gap-1">
