@@ -11,7 +11,7 @@ export const copyToClipboard = (
 
 export const addUrlIdToLocalStorage = (id: string, key = 'urls') => {
 	const urlsIds = getUrlsIdsFromLocalStorage(key);
-	const urlsToStore = [...urlsIds, id];
+	const urlsToStore = [...new Set([...urlsIds, id])];
 	const stringified = JSON.stringify(urlsToStore);
 	localStorage.setItem(key, stringified);
 
