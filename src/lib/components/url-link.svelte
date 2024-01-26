@@ -18,7 +18,7 @@
 	};
 </script>
 
-<div class="flex flex-row items-center gap-1">
+<div class="flex w-full flex-row items-center justify-between gap-1">
 	{#if browser}
 		{@const href = PUBLIC_ORIGIN + url.id}
 		<Tooltip.Root>
@@ -42,33 +42,35 @@
 				<p>Expires {moment(url.expiresAt).fromNow()}</p>
 			</Tooltip.Content>
 		</Tooltip.Root>
-		<p
-			class="flex aspect-square h-5 items-center justify-center rounded bg-primary-foreground px-1 text-sm font-bold text-primary"
-		>
-			{formatCount(url.redirects)}
-		</p>
-		<Button
-			variant="secondary"
-			class="flex aspect-square h-5 w-5 items-center justify-center rounded px-1 text-sm font-bold"
-			on:click={() =>
-				copyToClipboard(
-					href,
-					() =>
-						toast.success(CustomToast, {
-							componentProps: {
-								content: `Successfully copied <strong>${href}</strong> to your clipboard`
-							}
-						}),
-					() =>
-						toast.error(CustomToast, {
-							componentProps: {
-								content: `Error while copying <strong>${href}</strong> to your clipboard`
-							}
-						})
-				)}
-		>
-			<Clipboard />
-		</Button>
+		<div class="flex gap-1">
+			<p
+				class="flex aspect-square h-5 items-center justify-center rounded bg-primary-foreground px-1 text-sm font-bold text-primary"
+			>
+				{formatCount(url.redirects)}
+			</p>
+			<Button
+				variant="secondary"
+				class="flex aspect-square h-5 w-5 items-center justify-center rounded px-1 text-sm font-bold"
+				on:click={() =>
+					copyToClipboard(
+						href,
+						() =>
+							toast.success(CustomToast, {
+								componentProps: {
+									content: `Successfully copied <strong>${href}</strong> to your clipboard`
+								}
+							}),
+						() =>
+							toast.error(CustomToast, {
+								componentProps: {
+									content: `Error while copying <strong>${href}</strong> to your clipboard`
+								}
+							})
+					)}
+			>
+				<Clipboard />
+			</Button>
+		</div>
 	{:else}
 		<Button
 			variant="link"
