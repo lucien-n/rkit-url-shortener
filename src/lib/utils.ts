@@ -9,32 +9,4 @@ export const copyToClipboard = (
 	);
 };
 
-export const addUrlIdToLocalStorage = (id: string, key = 'urls') => {
-	const urlsIds = getUrlsIdsFromLocalStorage(key);
-	const urlsToStore = [...new Set([...urlsIds, id])];
-	const stringified = JSON.stringify(urlsToStore);
-	localStorage.setItem(key, stringified);
-
-	return urlsToStore;
-};
-
-export const removeUrlIdFromLocalStorage = (id: string, key = 'urls') => {
-	const urlsIds = getUrlsIdsFromLocalStorage(key);
-	const filteredUrls = urlsIds.filter((localId) => localId !== id);
-	const stringified = JSON.stringify(filteredUrls);
-	localStorage.setItem(key, stringified);
-
-	return filteredUrls;
-};
-
-export const getUrlsIdsFromLocalStorage = (key = 'urls') => {
-	const idsFromLocalStorage = localStorage.getItem(key);
-	if (!idsFromLocalStorage) return [];
-
-	const parsed = JSON.parse(idsFromLocalStorage) as Array<string>;
-
-	const validUrls = parsed.filter((id) => id.length === 6);
-	return validUrls;
-};
-
 export const stripProtocol = (url: string) => url.replace(/^(https?:\/\/)/, '');
