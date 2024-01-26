@@ -18,6 +18,15 @@ export const addUrlIdToLocalStorage = (id: string, key = 'urls') => {
 	return urlsToStore;
 };
 
+export const removeUrlIdFromLocalStorage = (id: string, key = 'urls') => {
+	const urlsIds = getUrlsIdsFromLocalStorage(key);
+	const filteredUrls = urlsIds.filter((localId) => localId !== id);
+	const stringified = JSON.stringify(filteredUrls);
+	localStorage.setItem(key, stringified);
+
+	return filteredUrls;
+};
+
 export const getUrlsIdsFromLocalStorage = (key = 'urls') => {
 	const idsFromLocalStorage = localStorage.getItem(key);
 	if (!idsFromLocalStorage) return [];

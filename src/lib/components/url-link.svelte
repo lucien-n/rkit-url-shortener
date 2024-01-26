@@ -1,20 +1,43 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { PUBLIC_ORIGIN } from '$env/static/public';
-	import { copyToClipboard, stripProtocol } from '$lib/utils';
+	import {
+		addUrlIdToLocalStorage,
+		copyToClipboard,
+		getUrlsIdsFromLocalStorage,
+		removeUrlIdFromLocalStorage,
+		stripProtocol
+	} from '$lib/utils';
 	import type { ShortUrl } from '$remult/short-url/short-url.entity';
 	import { Button } from '$shadcn/button';
 	import * as Tooltip from '$shadcn/tooltip';
 	import moment from 'moment';
-	import { Clipboard, Link2 } from 'radix-icons-svelte';
+	import { Clipboard, Link2, Star, StarFilled } from 'radix-icons-svelte';
+	import { onMount } from 'svelte';
 	import { toast } from 'svelte-sonner';
 	import CustomToast from './custom-toast.svelte';
 
 	export let url: ShortUrl;
 
+	let isFavorite = false;
+
+	onMount(() => {
+		isFavorite = getUrlsIdsFromLocalStorage('favorites').includes(url.id);
+	});
+
 	const formatCount = (count: number) => {
 		const formatter = Intl.NumberFormat('en', { notation: 'compact' });
 		return formatter.format(count);
+	};
+
+	const toggleFavorite = () => {
+		if (isFavorite) {
+			removeUrlIdFromLocalStorage(url.id, 'favorites');
+			isFavorite = false;
+		} else {
+			addUrlIdToLocalStorage(url.id, 'favorites');
+			isFavorite = true;
+		}
 	};
 </script>
 
@@ -69,6 +92,17 @@
 					)}
 			>
 				<Clipboard />
+			</Button>
+			<Button
+				variant="secondary"
+				class="flex aspect-square h-5 w-5 items-center justify-center rounded px-1 text-sm font-bold"
+				on:click={toggleFavorite}
+			>
+				{#if isFavorite}
+					<StarFilled />
+				{:else}
+					<Star />
+				{/if}
 			</Button>
 		</div>
 	{:else}
