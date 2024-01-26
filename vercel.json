@@ -4,5 +4,11 @@
 			"path": "/api/cron/delete-expired",
 			"schedule": "0 4 * * *"
 		}
-	]
+	],
+	"git": {
+		"deploymentEnabled": {
+			"main": true,
+			"dev": false
+		}
+	}
 }
