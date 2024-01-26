@@ -4,8 +4,8 @@
 	import { createEventDispatcher } from 'svelte';
 
 	type $$Props = Props;
-	export let builders: $$Props['builders'] = [];
 
+	export let builders: $$Props['builders'] = [];
 	export let hovered = false;
 	export let showText = false;
 	const dispatch = createEventDispatcher();
@@ -19,7 +19,6 @@
 	const startTimer = () => {
 		timer = setTimeout(() => {
 			if (hovered) showText = true;
-			console.log('tineout');
 			resetTimer();
 		}, 100);
 	};
