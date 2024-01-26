@@ -1,8 +1,13 @@
+import { REDIS_EX_MOST_VIEWED_URLS, REDIS_EX_SINGLE_URL } from '$env/static/private';
 import { ShortUrlsController } from '$remult/short-url/short-url.controller';
 import type { ShortUrl } from '$remult/short-url/short-url.entity';
 import { redis } from './redis';
 
 const REDIS_URL_KEY = 'url';
+const CACHE_EXPIRATIONS = {
+	singleUrl: parseInt(REDIS_EX_SINGLE_URL ?? '600'),
+	mostViewedUrls: parseInt(REDIS_EX_MOST_VIEWED_URLS ?? '900')
+};
 
 const getUrlFromCache = async (id: string) => {
 	const cached = await redis.get(`${REDIS_URL_KEY}:${id}`);
@@ -54,15 +59,15 @@ export const getUrls = async (ids: string[], bypassCache = false) => {
 	return urls.concat(dbUrls);
 };
 
-export const cacheUrl = async (url: ShortUrl) => {
+export const cacheUrl = async (url: ShortUrl, expiration = CACHE_EXPIRATIONS.singleUrl) => {
 	const redisKey = `${REDIS_URL_KEY}:${url.id}`;
-	await redis.set(redisKey, JSON.stringify(url), 'EX', 600);
+	await redis.set(redisKey, JSON.stringify(url), 'EX', expiration);
 };
 
 export const cacheUrls = async (urls: ShortUrl[]) => {
 	if (urls.length > 20) throw Error('Too many urls (20 >= urls)');
 
 	for (const url of urls) {
-		await cacheUrl(url);
+		await cacheUrl(url, CACHE_EXPIRATIONS.mostViewedUrls);
 	}
 };
