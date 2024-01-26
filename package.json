@@ -38,6 +38,7 @@
 	"type": "module",
 	"dependencies": {
 		"@vercel/analytics": "^1.1.2",
+		"@vercel/speed-insights": "^1.0.8",
 		"bits-ui": "^0.15.1",
 		"clsx": "^2.1.0",
 		"formsnap": "^0.4.2",
