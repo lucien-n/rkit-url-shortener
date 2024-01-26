@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { favoritesStore } from '$lib/stores';
 	import type { ShortUrl } from '$remult/short-url/short-url.entity';
-	import { Button } from '$shadcn/button';
 	import * as Popover from '$shadcn/popover';
 	import { Separator } from '$shadcn/separator';
-	import { StarFilled } from 'radix-icons-svelte';
+	import { Star } from 'radix-icons-svelte';
 	import { onDestroy, onMount } from 'svelte';
+	import NavButton from './nav-button.svelte';
 	import UrlLink from './url-link.svelte';
 
 	let urls: ShortUrl[] = [];
@@ -38,9 +38,10 @@
 
 <Popover.Root>
 	<Popover.Trigger asChild let:builder>
-		<Button builders={[builder]} variant="outline" size="icon">
-			<StarFilled class="h-[1.2rem] w-[1.2rem] transition-all" />
-		</Button>
+		<NavButton builders={[builder]}>
+			<Star class="h-[1.2rem] w-[1.2rem] transition-all" />
+			<svelte:fragment slot="text">Favorite Urls</svelte:fragment>
+		</NavButton>
 	</Popover.Trigger>
 	<Popover.Content class="m-1 min-w-96 space-y-3 font-mono">
 		<div class="flex flex-col gap-1">
