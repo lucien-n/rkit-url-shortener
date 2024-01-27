@@ -7,8 +7,8 @@ export const confetti = (node: HTMLElement, config: ConfettiConfig) => {
 };
 
 class Confetti {
-	static CONFIG: ConfettiConfig;
-	static CTX: CanvasRenderingContext2D | null;
+	ctx: CanvasRenderingContext2D | null = null;
+	config: ConfettiConfig = new ConfettiConfig();
 
 	gravity = 10;
 	particleCount = 75;
@@ -20,79 +20,57 @@ class Confetti {
 	time: number;
 	deltaTime: number;
 
-	active: boolean = false;
-
-	constructor(element: HTMLElement, config: ConfettiConfig | null) {
-		Confetti.CONFIG = config ?? new ConfettiConfig();
-
+	constructor(element: HTMLElement, config: ConfettiConfig) {
+		this.config = { ...this.config, ...config };
 		this.time = new Date().getTime();
 		this.deltaTime = 0;
 		this.setupCanvasContext();
 		this.setupElement(element);
+		window.requestAnimationFrame(() => this.update());
 	}
 
-	startConfetti() {
-		if (!this.active) {
-			this.active = true;
-			window.requestAnimationFrame((ts) => this.update(ts));
-		}
-	}
-
-	stopConfetti() {
-		this.active = false;
-	}
 	setCount(count: number): void {
-		if (typeof count !== 'number') {
-			throw new Error("Input must be of type 'number'");
-		}
-		Confetti.CONFIG.particleCount = count;
+		this.config.particleCount = count;
 	}
 
 	setPower(power: number): void {
-		if (typeof power !== 'number') {
-			throw new Error("Input must be of type 'number'");
-		}
-		Confetti.CONFIG.explosionPower = power;
+		this.config.explosionPower = power;
 	}
 
 	setSize(size: number): void {
-		if (typeof size !== 'number') {
-			throw new Error("Input must be of type 'number'");
-		}
-		Confetti.CONFIG.particleSize = size;
+		this.config.particleSize = size;
 	}
 
 	setFade(fade: boolean): void {
-		if (typeof fade !== 'boolean') {
-			throw new Error("Input must be of type 'boolean'");
-		}
-		Confetti.CONFIG.fade = fade;
+		this.config.fade = fade;
 	}
 
 	setDestroyTarget(destroy: boolean): void {
-		if (typeof destroy !== 'boolean') {
-			throw new Error("Input must be of type 'boolean'");
-		}
-		Confetti.CONFIG.destroyTarget = destroy;
+		this.config.destroyTarget = destroy;
 	}
 
-	private resetCanvasSize(canvas: HTMLCanvasElement) {
+	private resetCanvas(canvas: HTMLCanvasElement): void {
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
 	}
 
 	private setupCanvasContext(): void {
-		if (Confetti.CTX) return;
+		if (this.ctx) return;
 
 		const canvas = document.createElement('canvas');
-		Confetti.CTX = canvas.getContext('2d');
-		if (!Confetti.CTX) return;
+		this.ctx = canvas.getContext('2d');
+		if (!this.ctx) return;
 
-		this.resetCanvasSize(canvas);
+		this.resetCanvas(canvas);
 		this.setStyleAttributes(canvas);
+
 		document.body.appendChild(canvas);
 
-		window.addEventListener('resize', () => this.resetCanvasSize(canvas));
+		window.addEventListener('resize', () => this.resetCanvas(canvas));
+	}
+
+	private spawnburst(position: Point): void {
+		this.bursts.push(new Burst(position, this.config));
 	}
 
 	private setStyleAttributes(element: HTMLElement): void {
@@ -109,19 +87,15 @@ class Confetti {
 
 	private setupElement(element: HTMLElement): void {
 		element.addEventListener('click', (event) => {
-			const position = new Point(event.clientX, event.clientY);
-			this.bursts.push(new Burst(position));
-			if (Confetti.CONFIG.destroyTarget) {
+			this.spawnburst(new Point(event.clientX, event.clientY));
+
+			if (this.config.destroyTarget) {
 				element.style.visibility = 'hidden';
 			}
 		});
 	}
 
-	private update(timestamp?: number): void {
-		if (timestamp === undefined) {
-			timestamp = new Date().getTime();
-		}
-
+	private update(timestamp: number = 0): void {
 		this.deltaTime = (timestamp - this.time) / 1000;
 		this.time = timestamp;
 
@@ -133,25 +107,30 @@ class Confetti {
 		}
 
 		this.draw();
-
 		window.requestAnimationFrame((ts) => this.update(ts));
 	}
 
 	private draw(): void {
-		console.log('draw confetti');
-		Confetti.CTX && Confetti.CTX.clearRect(0, 0, 2 * window.innerWidth, 2 * window.innerHeight);
+		if (!this.ctx) return;
+
+		this.clearScreen();
 		for (const burst of this.bursts) {
-			burst.draw();
+			burst.draw(this.ctx);
 		}
+	}
+
+	clearScreen() {
+		if (!this.ctx) return;
+		this.ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 	}
 }
 
 class Burst {
 	particles: Particle[] = [];
 
-	constructor(position: Point) {
-		for (let i = 0; i < Confetti.CONFIG.particleCount; i++) {
-			this.particles.push(new Particle(position));
+	constructor(position: Point, config: ConfettiConfig) {
+		for (let i = 0; i < config.particleCount; i++) {
+			this.particles.push(new Particle(position, config));
 		}
 	}
 
@@ -164,14 +143,16 @@ class Burst {
 		}
 	}
 
-	draw(): void {
+	draw(ctx: CanvasRenderingContext2D): void {
 		for (const particle of this.particles) {
-			particle.draw();
+			particle.draw(ctx);
 		}
 	}
 }
 
 class Particle {
+	config!: ConfettiConfig;
+
 	size: Point;
 	position: Point;
 	velocity: Point;
@@ -181,13 +162,15 @@ class Particle {
 	opacity: number;
 	lifetime: number;
 
-	constructor(position: Point) {
+	constructor(position: Point, config: ConfettiConfig) {
+		this.config = config;
+
 		this.size = new Point(
-			(16 * Math.random() + 4) * Confetti.CONFIG.particleSize,
-			(4 * Math.random() + 4) * Confetti.CONFIG.particleSize
+			(16 * Math.random() + 4) * config.particleSize,
+			(4 * Math.random() + 4) * config.particleSize
 		);
 		this.position = new Point(position.x - this.size.x / 2, position.y - this.size.y / 2);
-		this.velocity = CanvasUtil.generateVelocity();
+		this.velocity = this.generateVelocity();
 		this.rotation = 360 * Math.random();
 		this.rotationSpeed = 10 * (Math.random() - 0.5);
 		this.hue = 360 * Math.random();
@@ -196,25 +179,54 @@ class Particle {
 	}
 
 	update(time: number): void {
-		this.velocity.y +=
-			Confetti.CONFIG.gravity * (this.size.y / (10 * Confetti.CONFIG.particleSize)) * time;
+		this.velocity.y += this.config.gravity * (this.size.y / (10 * this.config.particleSize)) * time;
 		this.velocity.x += 25 * (Math.random() - 0.5) * time;
 		this.velocity.y *= 0.98;
 		this.velocity.x *= 0.98;
 		this.position.x += this.velocity.x;
 		this.position.y += this.velocity.y;
 		this.rotation += this.rotationSpeed;
-		if (Confetti.CONFIG.fade) {
+
+		if (this.config.fade) {
 			this.opacity -= this.lifetime;
 		}
 	}
 
 	checkBounds(): boolean {
-		return this.position.y - 2 * this.size.x > 2 * window.innerHeight;
+		return this.position.y - this.size.x > window.innerHeight;
 	}
 
-	draw(): void {
-		CanvasUtil.drawRectangle(this.position, this.size, this.rotation, this.hue, this.opacity);
+	draw(ctx: CanvasRenderingContext2D): void {
+		this.drawRectangle(this.position, this.size, this.rotation, this.hue, this.opacity, ctx);
+	}
+
+	drawRectangle(
+		position: Point,
+		size: Point,
+		rotation: number,
+		hue: number,
+		opacity: number,
+		ctx: CanvasRenderingContext2D
+	) {
+		ctx.save();
+		ctx.beginPath();
+		ctx.translate(position.x + size.x / 2, position.y + size.y / 2);
+		ctx.rotate((rotation * Math.PI) / 180);
+		ctx.rect(-size.x / 2, -size.y / 2, size.x, size.y);
+		ctx.fillStyle = 'hsla(' + hue + 'deg, 90%, 65%, ' + opacity + '%)';
+		ctx.fill();
+		ctx.restore();
+	}
+
+	generateVelocity() {
+		const randomX = Math.random() - 0.5;
+		let randomY = Math.random() - 0.7;
+		const magnitude = Math.sqrt(randomX * randomX + randomY * randomY);
+		randomY /= magnitude;
+		return new Point(
+			randomX * (Math.random() * this.config.explosionPower),
+			randomY * (Math.random() * this.config.explosionPower)
+		);
 	}
 }
 
@@ -236,28 +248,3 @@ class ConfettiConfig {
 	destroyTarget: boolean = true;
 	fade: boolean = false;
 }
-
-const CanvasUtil = {
-	drawRectangle: (position: Point, size: Point, rotation: number, hue: number, opacity: number) => {
-		if (!Confetti.CTX) return;
-
-		Confetti.CTX.save();
-		Confetti.CTX.beginPath();
-		Confetti.CTX.translate(position.x + size.x / 2, position.y + size.y / 2);
-		Confetti.CTX.rotate((rotation * Math.PI) / 180);
-		Confetti.CTX.rect(-size.x / 2, -size.y / 2, size.x, size.y);
-		Confetti.CTX.fillStyle = 'hsla(' + hue + 'deg, 90%, 65%, ' + opacity + '%)';
-		Confetti.CTX.fill();
-		Confetti.CTX.restore();
-	},
-	generateVelocity: () => {
-		const randomX = Math.random() - 0.5;
-		let randomY = Math.random() - 0.7;
-		const magnitude = Math.sqrt(randomX * randomX + randomY * randomY);
-		randomY /= magnitude;
-		return new Point(
-			randomX * (Math.random() * Confetti.CONFIG.explosionPower),
-			randomY * (Math.random() * Confetti.CONFIG.explosionPower)
-		);
-	}
-};
