@@ -2,6 +2,7 @@
 	import MostViewed from '$comp/most-viewed.svelte';
 	import UrlDialog from '$comp/url/url-dialog.svelte';
 	import UrlForm from '$comp/url/url-form.svelte';
+	import { confetti } from '$lib/confetti';
 	import { urlsStore } from '$lib/stores';
 	import type { ShortUrl } from '$remult/short-url/short-url.entity';
 	import { toast } from 'svelte-sonner';
@@ -25,6 +26,7 @@
 		</p>
 	</div>
 	<div class="w-full">
+		<button use:confetti={{ destroyTarget: false }}>Test button</button>
 		<UrlForm
 			form={data.form}
 			on:success={({ detail }) => {
