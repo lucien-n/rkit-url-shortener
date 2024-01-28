@@ -1,8 +1,10 @@
 export const confetti = (node: HTMLElement, config: ConfettiConfig) => {
-	new Confetti(node, config);
+	const c = new Confetti(node, config);
 
 	return {
-		destroy() {}
+		destroy() {
+			c.stop();
+		}
 	};
 };
 
@@ -10,23 +12,21 @@ class Confetti {
 	ctx: CanvasRenderingContext2D | null = null;
 	config: ConfettiConfig = new ConfettiConfig();
 
-	gravity = 10;
-	count = 75;
-	size = 1;
-	power = 25;
-	fade = true;
-	bursts: Burst[] = [];
-	time: number;
-	deltaTime: number;
+	private bursts: Burst[] = [];
+	private previousTime: number;
+	private animationFrameRequest: number = -1;
+	private emitter: HTMLElement | null = null;
 
 	constructor(element: HTMLElement, config: ConfettiConfig) {
 		this.config = { ...this.config, ...config };
-		this.time = new Date().getTime();
-		this.deltaTime = 0;
+		this.previousTime = new Date().getTime();
 
 		this.setupCanvasContext();
 		this.setupEmitter(element);
-		window.requestAnimationFrame(() => this.update());
+
+		window.requestAnimationFrame(() => {
+			this.update();
+		});
 	}
 
 	setCount(count: number): void {
@@ -75,9 +75,7 @@ class Confetti {
 	}
 
 	private setupEmitter(emitter: HTMLElement): void {
-		emitter.addEventListener('click', (event) => {
-			this.spawnBurst(new Position(event.clientX, event.clientY));
-		});
+		emitter.addEventListener('click', this.trigger);
 	}
 
 	private clearScreen() {
@@ -89,19 +87,24 @@ class Confetti {
 		this.bursts.push(new Burst(position, this.config));
 	}
 
-	private update(timestamp: number = 0): void {
-		this.deltaTime = (timestamp - this.time) / 1000;
-		this.time = timestamp;
+	private trigger(event: MouseEvent) {
+		this.spawnBurst(new Position(event.clientX, event.clientY));
+		if (this.config.destroyEmitter && this.emitter) this.emitter.style.display = 'none';
+	}
+
+	private update(now: number = 0): void {
+		const deltaTime = (now - this.previousTime) / 1000;
+		this.previousTime = now;
 
 		for (let i = this.bursts.length - 1; i >= 0; i--) {
-			this.bursts[i].update(this.deltaTime);
+			this.bursts[i].update(deltaTime);
 			if (this.bursts[i].particles.length === 0) {
 				this.bursts.splice(i, 1);
 			}
 		}
 
 		this.draw();
-		window.requestAnimationFrame((ts) => this.update(ts));
+		this.animationFrameRequest = window.requestAnimationFrame((ts) => this.update(ts));
 	}
 
 	private draw(): void {
@@ -111,6 +114,14 @@ class Confetti {
 		for (const burst of this.bursts) {
 			burst.draw(this.ctx);
 		}
+	}
+
+	stop() {
+		window.cancelAnimationFrame(this.animationFrameRequest);
+		this.emitter?.removeEventListener('click', this.trigger);
+
+		this.clearScreen();
+		this.bursts = [];
 	}
 }
 
@@ -234,6 +245,6 @@ class ConfettiConfig {
 	count: number = 75;
 	size: number = 1;
 	power: number = 25;
-	destroyTarget: boolean = true;
+	destroyEmitter: boolean = true;
 	fade: boolean = false;
 }

@@ -94,7 +94,7 @@
 		</Form.Field>
 		<br />
 		<Form.Button
-			class=" flex w-full gap-2 overflow-hidden py-6 text-2xl font-bold tracking-tight text-primary-foreground transition-all duration-300 ease-in-out"
+			class="flex w-full items-center gap-3 py-6 text-2xl font-bold tracking-tight"
 			disabled={loading}
 		>
 			<div class:animate-loading={loading}>
