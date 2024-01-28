@@ -11,11 +11,10 @@ class Confetti {
 	config: ConfettiConfig = new ConfettiConfig();
 
 	gravity = 10;
-	particleCount = 75;
-	particleSize = 1;
-	explosionPower = 25;
-	destroyTarget = true;
-	fade = false;
+	count = 75;
+	size = 1;
+	power = 25;
+	fade = true;
 	bursts: Burst[] = [];
 	time: number;
 	deltaTime: number;
@@ -24,34 +23,41 @@ class Confetti {
 		this.config = { ...this.config, ...config };
 		this.time = new Date().getTime();
 		this.deltaTime = 0;
+
 		this.setupCanvasContext();
-		this.setupElement(element);
+		this.setupEmitter(element);
 		window.requestAnimationFrame(() => this.update());
 	}
 
 	setCount(count: number): void {
-		this.config.particleCount = count;
+		this.config.count = count;
 	}
 
 	setPower(power: number): void {
-		this.config.explosionPower = power;
+		this.config.power = power;
 	}
 
 	setSize(size: number): void {
-		this.config.particleSize = size;
+		this.config.size = size;
 	}
 
 	setFade(fade: boolean): void {
 		this.config.fade = fade;
 	}
 
-	setDestroyTarget(destroy: boolean): void {
-		this.config.destroyTarget = destroy;
-	}
-
 	private resetCanvas(canvas: HTMLCanvasElement): void {
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
+
+		canvas.style.position = 'fixed';
+		canvas.style.top = '0';
+		canvas.style.left = '0';
+		canvas.style.width = 'calc(100%)';
+		canvas.style.height = 'calc(100%)';
+		canvas.style.margin = '0';
+		canvas.style.padding = '0';
+		canvas.style.zIndex = '999999999';
+		canvas.style.pointerEvents = 'none';
 	}
 
 	private setupCanvasContext(): void {
@@ -62,37 +68,25 @@ class Confetti {
 		if (!this.ctx) return;
 
 		this.resetCanvas(canvas);
-		this.setStyleAttributes(canvas);
 
 		document.body.appendChild(canvas);
 
 		window.addEventListener('resize', () => this.resetCanvas(canvas));
 	}
 
-	private spawnburst(position: Point): void {
-		this.bursts.push(new Burst(position, this.config));
-	}
-
-	private setStyleAttributes(element: HTMLElement): void {
-		element.style.position = 'fixed';
-		element.style.top = '0';
-		element.style.left = '0';
-		element.style.width = 'calc(100%)';
-		element.style.height = 'calc(100%)';
-		element.style.margin = '0';
-		element.style.padding = '0';
-		element.style.zIndex = '999999999';
-		element.style.pointerEvents = 'none';
-	}
-
-	private setupElement(element: HTMLElement): void {
-		element.addEventListener('click', (event) => {
-			this.spawnburst(new Point(event.clientX, event.clientY));
-
-			if (this.config.destroyTarget) {
-				element.style.visibility = 'hidden';
-			}
+	private setupEmitter(emitter: HTMLElement): void {
+		emitter.addEventListener('click', (event) => {
+			this.spawnBurst(new Position(event.clientX, event.clientY));
 		});
+	}
+
+	private clearScreen() {
+		if (!this.ctx) return;
+		this.ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+	}
+
+	private spawnBurst(position: Position): void {
+		this.bursts.push(new Burst(position, this.config));
 	}
 
 	private update(timestamp: number = 0): void {
@@ -118,18 +112,13 @@ class Confetti {
 			burst.draw(this.ctx);
 		}
 	}
-
-	clearScreen() {
-		if (!this.ctx) return;
-		this.ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-	}
 }
 
 class Burst {
 	particles: Particle[] = [];
 
-	constructor(position: Point, config: ConfettiConfig) {
-		for (let i = 0; i < config.particleCount; i++) {
+	constructor(position: Position, config: ConfettiConfig) {
+		for (let i = 0; i < config.count; i++) {
 			this.particles.push(new Particle(position, config));
 		}
 	}
@@ -153,23 +142,23 @@ class Burst {
 class Particle {
 	config!: ConfettiConfig;
 
-	size: Point;
-	position: Point;
-	velocity: Point;
+	size: Position;
+	position: Position;
+	velocity: Position;
 	rotation: number;
 	rotationSpeed: number;
 	hue: number;
 	opacity: number;
 	lifetime: number;
 
-	constructor(position: Point, config: ConfettiConfig) {
+	constructor(position: Position, config: ConfettiConfig) {
 		this.config = config;
 
-		this.size = new Point(
-			(16 * Math.random() + 4) * config.particleSize,
-			(4 * Math.random() + 4) * config.particleSize
+		this.size = new Position(
+			(16 * Math.random() + 4) * config.size,
+			(4 * Math.random() + 4) * config.size
 		);
-		this.position = new Point(position.x - this.size.x / 2, position.y - this.size.y / 2);
+		this.position = new Position(position.x - this.size.x / 2, position.y - this.size.y / 2);
 		this.velocity = this.generateVelocity();
 		this.rotation = 360 * Math.random();
 		this.rotationSpeed = 10 * (Math.random() - 0.5);
@@ -179,7 +168,7 @@ class Particle {
 	}
 
 	update(time: number): void {
-		this.velocity.y += this.config.gravity * (this.size.y / (10 * this.config.particleSize)) * time;
+		this.velocity.y += this.config.gravity * (this.size.y / (10 * this.config.size)) * time;
 		this.velocity.x += 25 * (Math.random() - 0.5) * time;
 		this.velocity.y *= 0.98;
 		this.velocity.x *= 0.98;
@@ -201,8 +190,8 @@ class Particle {
 	}
 
 	drawRectangle(
-		position: Point,
-		size: Point,
+		position: Position,
+		size: Position,
 		rotation: number,
 		hue: number,
 		opacity: number,
@@ -223,14 +212,14 @@ class Particle {
 		let randomY = Math.random() - 0.7;
 		const magnitude = Math.sqrt(randomX * randomX + randomY * randomY);
 		randomY /= magnitude;
-		return new Point(
-			randomX * (Math.random() * this.config.explosionPower),
-			randomY * (Math.random() * this.config.explosionPower)
+		return new Position(
+			randomX * (Math.random() * this.config.power),
+			randomY * (Math.random() * this.config.power)
 		);
 	}
 }
 
-class Point {
+class Position {
 	x: number;
 	y: number;
 
@@ -242,9 +231,9 @@ class Point {
 
 class ConfettiConfig {
 	gravity: number = 10;
-	particleCount: number = 75;
-	particleSize: number = 1;
-	explosionPower: number = 25;
+	count: number = 75;
+	size: number = 1;
+	power: number = 25;
 	destroyTarget: boolean = true;
 	fade: boolean = false;
 }
