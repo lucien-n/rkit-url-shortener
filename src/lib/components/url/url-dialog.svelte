@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { PUBLIC_ORIGIN } from '$env/static/public';
-	import { confetti } from '$lib/confetti';
 	import { getDaysBetweenDates } from '$lib/helpers';
 	import { copyToClipboard, stripProtocol } from '$lib/utils';
 	import { Expiration } from '$remult/short-url/enums/expiration.enum';
@@ -44,55 +43,52 @@
 				{/if}
 			</Dialog.Description>
 		</Dialog.Header>
-		<div use:confetti={{ instantTrigger: true }}>
-			<div class="my-5 text-center">
-				<Button
-					class="border text-lg"
-					variant="link"
-					href={url.url}
-					data-sveltekit-preload-data="off"
-				>
-					<p class="text-foreground/80">
-						{stripProtocol(PUBLIC_ORIGIN)}
-					</p>
-					<p class="font-bold">{url.id}</p>
-				</Button>
-			</div>
-
-			<Dialog.Footer>
-				<Button variant="secondary" on:click={() => (open = false)}>Close</Button>
-				<Button
-					class="flex items-center gap-1 "
-					on:click={() => {
-						if (copySucceeded) return;
-						copyToClipboard(
-							shorturl,
-							() => {
-								toast.error(CustomToast, {
-									componentProps: {
-										content: `Successfully copied <strong>${shorturl}</strong> to your clipboard`
-									}
-								});
-								copySucceeded = true;
-								setTimeout(() => (copySucceeded = false), 2000);
-							},
-							() => {
-								toast.error(CustomToast, {
-									componentProps: {
-										content: `Error while copying <strong>${shorturl}</strong> to your clipboard`
-									}
-								});
-								copySucceeded = false;
-							}
-						);
-					}}
-					>{copySucceeded ? 'Copied!' : 'Copy'}
-					{#if !copySucceeded}
-						<ClipboardCopy />
-					{/if}
-				</Button>
-				<button use:confetti>test</button>
-			</Dialog.Footer>
+		<div class="my-5 text-center">
+			<Button
+				class="border text-lg"
+				variant="link"
+				href={url.url}
+				data-sveltekit-preload-data="off"
+			>
+				<p class="text-foreground/80">
+					{stripProtocol(PUBLIC_ORIGIN)}
+				</p>
+				<p class="font-bold">{url.id}</p>
+			</Button>
 		</div>
+
+		<Dialog.Footer>
+			<Button variant="secondary" on:click={() => (open = false)}>Close</Button>
+			<Button
+				class="flex items-center gap-1 "
+				on:click={() => {
+					if (copySucceeded) return;
+					copyToClipboard(
+						shorturl,
+						() => {
+							toast.error(CustomToast, {
+								componentProps: {
+									content: `Successfully copied <strong>${shorturl}</strong> to your clipboard`
+								}
+							});
+							copySucceeded = true;
+							setTimeout(() => (copySucceeded = false), 2000);
+						},
+						() => {
+							toast.error(CustomToast, {
+								componentProps: {
+									content: `Error while copying <strong>${shorturl}</strong> to your clipboard`
+								}
+							});
+							copySucceeded = false;
+						}
+					);
+				}}
+				>{copySucceeded ? 'Copied!' : 'Copy'}
+				{#if !copySucceeded}
+					<ClipboardCopy />
+				{/if}
+			</Button>
+		</Dialog.Footer>
 	</Dialog.Content>
 </Dialog.Root>
