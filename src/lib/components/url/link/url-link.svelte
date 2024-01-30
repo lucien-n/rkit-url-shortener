@@ -6,15 +6,18 @@
 	import { Button } from '$shadcn/button';
 	import * as Tooltip from '$shadcn/tooltip';
 	import moment from 'moment';
-	import { Link2 } from 'radix-icons-svelte';
+	import { ExclamationTriangle, Link2 } from 'radix-icons-svelte';
 	import CopyToClipboard from './actions/copy-to-clipboard.svelte';
 	import Favorite from './actions/favorite.svelte';
 	import RedirectCount from './actions/redirect-count.svelte';
 
 	export let url: ShortUrl;
 
-	const willExpire = (): boolean =>
-		new Date(url.expiresAt).getUTCFullYear() > new Date().getUTCFullYear() + 10;
+	const expiresAt = new Date(url.expiresAt);
+	const now = new Date();
+
+	const willExpire = expiresAt.getUTCFullYear() > now.getUTCFullYear() + 10;
+	const expirationWarning = expiresAt.getTime() - now < 1000 * 60 * 60 * 24 * 7; // miliseconds * seconds * minutes * hours * days
 </script>
 
 <div class="flex w-full flex-row items-center justify-between gap-1">
@@ -28,7 +31,11 @@
 					data-sveltekit-preload-data="off"
 					class="mx-auto flex w-full items-center justify-start gap-1 px-1"
 				>
-					<Link2 />
+					{#if expirationWarning}
+						<ExclamationTriangle />
+					{:else}
+						<Link2 />
+					{/if}
 					<p>
 						<span class="text-primary/50">{stripProtocol(PUBLIC_ORIGIN)}</span><strong
 							>{url.id}</strong
@@ -38,7 +45,11 @@
 			</Tooltip.Trigger>
 			<Tooltip.Content class="text-foreground-muted bg-secondary text-sm">
 				<p>Created {moment(url.createdAt).fromNow()}</p>
-				<p>{willExpire() ? 'Never expires' : `Expires ${moment(url.expiresAt).fromNow()}`}</p>
+				{#if willExpire}
+					<p>Never expires</p>
+				{:else}
+					<p>Expires {moment(url.expiresAt).fromNow()}</p>
+				{/if}
 			</Tooltip.Content>
 		</Tooltip.Root>
 		<div class="flex justify-end gap-1">
