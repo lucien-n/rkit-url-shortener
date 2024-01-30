@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { PUBLIC_ORIGIN } from '$env/static/public';
+	import { Confetti } from '$lib/confetti';
 	import { getDaysBetweenDates } from '$lib/helpers';
 	import { copyToClipboard, stripProtocol } from '$lib/utils';
 	import { Expiration } from '$remult/short-url/enums/expiration.enum';
@@ -15,13 +16,17 @@
 	export let open = false;
 	export let url: ShortUrl;
 
-	let copySucceeded = false;
+	let confetti: Confetti | null = null;
 
+	let copySucceeded = false;
 	let shorturl = '';
 
 	onMount(() => {
+		confetti = new Confetti(null, { count: 150, power: 40, fade: true });
 		browser ? window.location.origin + '/' + url?.id : 'no-url';
 	});
+
+	$: if (open && browser) confetti.trigger(window.innerWidth / 2, window.innerHeight / 2);
 </script>
 
 <Dialog.Root bind:open>

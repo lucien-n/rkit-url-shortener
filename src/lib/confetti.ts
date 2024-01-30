@@ -1,11 +1,7 @@
 export const confetti = (node: HTMLElement, config: ConfettiConfig) => {
-	const c = new Confetti(node, config);
+	new Confetti(node, config);
 
-	return {
-		destroy() {
-			c.stop();
-		}
-	};
+	return {};
 };
 
 export class Confetti {
@@ -14,9 +10,7 @@ export class Confetti {
 
 	private bursts: Burst[] = [];
 	private previousTime: number = 0;
-	private animationFrameRequest: number = -1;
 	private emitter: HTMLElement | null = null;
-	private canvas: HTMLCanvasElement | null = null;
 
 	constructor(emitter: HTMLElement, config: ConfettiConfig) {
 		this.config = { ...this.config, ...config };
@@ -41,6 +35,14 @@ export class Confetti {
 
 	setFade(fade: boolean) {
 		this.config.fade = fade;
+	}
+
+	trigger(x: number, y: number) {
+		this.spawnBurst(new Position(x, y));
+
+		if (this.emitter && this.config.destroyEmitter) {
+			this.emitter.style.visibility = 'hidden';
+		}
 	}
 
 	private resizeCanvas(canvas: HTMLCanvasElement) {
@@ -72,14 +74,12 @@ export class Confetti {
 
 		document.body.appendChild(canvas);
 
-		this.canvas = canvas;
-
 		window.addEventListener('resize', () => this.resizeCanvas(canvas));
 	}
 
 	private setupEmitter(emitter: HTMLElement) {
 		if (!emitter) return;
-		emitter.addEventListener('click', (event) => this.trigger(event));
+		emitter.addEventListener('click', (event) => this.trigger(event.clientX, event.clientY));
 	}
 
 	private clearScreen() {
@@ -89,14 +89,6 @@ export class Confetti {
 
 	private spawnBurst(position: Position) {
 		this.bursts.push(new Burst(position, this.config));
-	}
-
-	private trigger(event: MouseEvent) {
-		this.spawnBurst(new Position(event.clientX, event.clientY));
-
-		if (this.emitter && this.config.destroyEmitter) {
-			this.emitter.style.visibility = 'hidden';
-		}
 	}
 
 	private update(now: number = 0) {
@@ -121,14 +113,6 @@ export class Confetti {
 		for (const burst of this.bursts) {
 			burst.draw(this.ctx);
 		}
-	}
-
-	stop() {
-		window.cancelAnimationFrame(this.animationFrameRequest);
-		this.emitter?.removeEventListener('click', (event) => this.trigger(event));
-
-		this.clearScreen();
-		this.bursts = [];
 	}
 }
 
