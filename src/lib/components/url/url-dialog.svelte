@@ -68,7 +68,7 @@
 						() => {
 							toast.error(CustomToast, {
 								componentProps: {
-									content: `Successfully copied <strong>${shorturl}</strong> to your clipboard`
+									content: `Successfully copied <strong>${shorturl}</strong> to your clipboard 🎉`
 								}
 							});
 							copySucceeded = true;
@@ -77,7 +77,7 @@
 						() => {
 							toast.error(CustomToast, {
 								componentProps: {
-									content: `Error while copying <strong>${shorturl}</strong> to your clipboard`
+									content: `Error while copying <strong>${shorturl}</strong> to your clipboard 😢`
 								}
 							});
 							copySucceeded = false;
