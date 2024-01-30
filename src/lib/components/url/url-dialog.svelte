@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import { ORIGIN } from '$env/static/public';
+	import { PUBLIC_ORIGIN } from '$env/static/public';
 	import { Confetti } from '$lib/confetti';
 	import { getDaysBetweenDates } from '$lib/helpers';
 	import { copyToClipboard, stripProtocol } from '$lib/utils';
@@ -56,7 +56,7 @@
 				data-sveltekit-preload-data="off"
 			>
 				<p class="text-foreground/80">
-					{stripProtocol(ORIGIN)}
+					{stripProtocol(PUBLIC_ORIGIN)}
 				</p>
 				<p class="font-bold">{url.id}</p>
 			</Button>
