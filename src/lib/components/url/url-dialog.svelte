@@ -38,7 +38,7 @@
 				{@const daysToExpiration = getDaysBetweenDates(url.createdAt, url.expiresAt)}
 				{#if daysToExpiration > Expiration.OneYear * 100}
 					<p>
-						It will never expire but will be <strong>deleted</strong> if not used in during
+						It will never expire but will be <strong>deleted</strong> if stale for more than
 						<strong>90</strong> days
 					</p>
 				{:else}
