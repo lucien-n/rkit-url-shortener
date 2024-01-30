@@ -66,7 +66,7 @@
 					copyToClipboard(
 						shorturl,
 						() => {
-							toast.error(CustomToast, {
+							toast.success(CustomToast, {
 								componentProps: {
 									content: `Successfully copied <strong>${shorturl}</strong> to your clipboard 🎉`
 								}
