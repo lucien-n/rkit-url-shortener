@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import { URL_EXPIRATION_TRESHOLD_DAYS } from '$env/static/private';
-	import { PUBLIC_ORIGIN } from '$env/static/public';
+	import { ORIGIN, URL_EXPIRATION_TRESHOLD_DAYS } from '$env/static/public';
 	import { stripProtocol } from '$lib/utils';
 	import type { ShortUrl } from '$remult/short-url/short-url.entity';
 	import { Button } from '$shadcn/button';
@@ -24,7 +23,7 @@
 
 <div class="flex w-full flex-row items-center justify-between gap-1">
 	{#if browser}
-		{@const href = PUBLIC_ORIGIN + url.id}
+		{@const href = ORIGIN + url.id}
 		<Tooltip.Root>
 			<Tooltip.Trigger>
 				<Button
@@ -39,9 +38,7 @@
 						<Link2 />
 					{/if}
 					<p>
-						<span class="text-primary/50">{stripProtocol(PUBLIC_ORIGIN)}</span><strong
-							>{url.id}</strong
-						>
+						<span class="text-primary/50">{stripProtocol(ORIGIN)}</span><strong>{url.id}</strong>
 					</p>
 				</Button>
 			</Tooltip.Trigger>
