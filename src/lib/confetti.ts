@@ -1,3 +1,5 @@
+import { browser } from '$app/environment';
+
 export const confetti = (node: HTMLElement, config: ConfettiConfig) => {
 	new Confetti(node, config);
 
@@ -13,6 +15,8 @@ export class Confetti {
 	private emitter: HTMLElement | null = null;
 
 	constructor(emitter: HTMLElement, config: ConfettiConfig) {
+		if (!browser) throw "Please use confetti's in a browser environment";
+
 		this.config = { ...this.config, ...config };
 
 		this.setupCanvasContext();
