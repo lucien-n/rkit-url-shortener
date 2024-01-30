@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import { PUBLIC_ORIGIN } from '$env/static/public';
+	import { PUBLIC_ORIGIN, PUBLIC_URL_EXPIRATION_TRESHOLD_DAYS } from '$env/static/public';
 	import { stripProtocol } from '$lib/utils';
 	import type { ShortUrl } from '$remult/short-url/short-url.entity';
 	import { Button } from '$shadcn/button';
@@ -17,7 +17,9 @@
 	const now = new Date();
 
 	const willExpire = expiresAt.getUTCFullYear() > now.getUTCFullYear() + 10;
-	const expirationWarning = expiresAt.getTime() - now < 1000 * 60 * 60 * 24 * 7; // miliseconds * seconds * minutes * hours * days
+	const expirationWarning =
+		expiresAt.getTime() - now <
+		1000 * 60 * 60 * 24 * parseInt(PUBLIC_URL_EXPIRATION_TRESHOLD_DAYS ?? '7'); // miliseconds * seconds * minutes * hours * days
 </script>
 
 <div class="flex w-full flex-row items-center justify-between gap-1">
