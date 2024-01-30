@@ -8,47 +8,42 @@ export const confetti = (node: HTMLElement, config: ConfettiConfig) => {
 	};
 };
 
-class Confetti {
+export class Confetti {
 	ctx: CanvasRenderingContext2D | null = null;
 	config: ConfettiConfig = new ConfettiConfig();
 
 	private bursts: Burst[] = [];
-	private previousTime: number;
+	private previousTime: number = 0;
 	private animationFrameRequest: number = -1;
 	private emitter: HTMLElement | null = null;
+	private canvas: HTMLCanvasElement | null = null;
 
-	constructor(element: HTMLElement, config: ConfettiConfig) {
+	constructor(emitter: HTMLElement, config: ConfettiConfig) {
 		this.config = { ...this.config, ...config };
-		this.previousTime = new Date().getTime();
 
 		this.setupCanvasContext();
-		this.setupEmitter(element);
+		this.setupEmitter(emitter);
 
-		window.requestAnimationFrame(() => {
-			this.update();
-		});
+		window.requestAnimationFrame(() => this.update());
 	}
 
-	setCount(count: number): void {
+	setCount(count: number) {
 		this.config.count = count;
 	}
 
-	setPower(power: number): void {
+	setPower(power: number) {
 		this.config.power = power;
 	}
 
-	setSize(size: number): void {
+	setSize(size: number) {
 		this.config.size = size;
 	}
 
-	setFade(fade: boolean): void {
+	setFade(fade: boolean) {
 		this.config.fade = fade;
 	}
 
-	private resetCanvas(canvas: HTMLCanvasElement): void {
-		canvas.width = window.innerWidth;
-		canvas.height = window.innerHeight;
-
+	private resizeCanvas(canvas: HTMLCanvasElement) {
 		canvas.style.position = 'fixed';
 		canvas.style.top = '0';
 		canvas.style.left = '0';
@@ -60,22 +55,31 @@ class Confetti {
 		canvas.style.pointerEvents = 'none';
 	}
 
-	private setupCanvasContext(): void {
+	private styleCanvas(canvas: HTMLCanvasElement) {
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
+	}
+
+	private setupCanvasContext() {
 		if (this.ctx) return;
 
 		const canvas = document.createElement('canvas');
 		this.ctx = canvas.getContext('2d');
 		if (!this.ctx) return;
 
-		this.resetCanvas(canvas);
+		this.resizeCanvas(canvas);
+		this.styleCanvas(canvas);
 
 		document.body.appendChild(canvas);
 
-		window.addEventListener('resize', () => this.resetCanvas(canvas));
+		this.canvas = canvas;
+
+		window.addEventListener('resize', () => this.resizeCanvas(canvas));
 	}
 
-	private setupEmitter(emitter: HTMLElement): void {
-		emitter.addEventListener('click', this.trigger);
+	private setupEmitter(emitter: HTMLElement) {
+		if (!emitter) return;
+		emitter.addEventListener('click', (event) => this.trigger(event));
 	}
 
 	private clearScreen() {
@@ -83,16 +87,19 @@ class Confetti {
 		this.ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 	}
 
-	private spawnBurst(position: Position): void {
+	private spawnBurst(position: Position) {
 		this.bursts.push(new Burst(position, this.config));
 	}
 
 	private trigger(event: MouseEvent) {
 		this.spawnBurst(new Position(event.clientX, event.clientY));
-		if (this.config.destroyEmitter && this.emitter) this.emitter.style.display = 'none';
+
+		if (this.emitter && this.config.destroyEmitter) {
+			this.emitter.style.visibility = 'hidden';
+		}
 	}
 
-	private update(now: number = 0): void {
+	private update(now: number = 0) {
 		const deltaTime = (now - this.previousTime) / 1000;
 		this.previousTime = now;
 
@@ -104,10 +111,10 @@ class Confetti {
 		}
 
 		this.draw();
-		this.animationFrameRequest = window.requestAnimationFrame((ts) => this.update(ts));
+		window.requestAnimationFrame((ts) => this.update(ts));
 	}
 
-	private draw(): void {
+	private draw() {
 		if (!this.ctx) return;
 
 		this.clearScreen();
@@ -118,7 +125,7 @@ class Confetti {
 
 	stop() {
 		window.cancelAnimationFrame(this.animationFrameRequest);
-		this.emitter?.removeEventListener('click', this.trigger);
+		this.emitter?.removeEventListener('click', (event) => this.trigger(event));
 
 		this.clearScreen();
 		this.bursts = [];
@@ -134,7 +141,7 @@ class Burst {
 		}
 	}
 
-	update(time: number): void {
+	update(time: number) {
 		for (let i = this.particles.length - 1; i >= 0; i--) {
 			this.particles[i].update(time);
 			if (this.particles[i].checkBounds()) {
@@ -143,7 +150,7 @@ class Burst {
 		}
 	}
 
-	draw(ctx: CanvasRenderingContext2D): void {
+	draw(ctx: CanvasRenderingContext2D) {
 		for (const particle of this.particles) {
 			particle.draw(ctx);
 		}
@@ -178,7 +185,7 @@ class Particle {
 		this.lifetime = Math.random() + 0.25;
 	}
 
-	update(time: number): void {
+	update(time: number) {
 		this.velocity.y += this.config.gravity * (this.size.y / (10 * this.config.size)) * time;
 		this.velocity.x += 25 * (Math.random() - 0.5) * time;
 		this.velocity.y *= 0.98;
@@ -196,7 +203,7 @@ class Particle {
 		return this.position.y - this.size.x > window.innerHeight;
 	}
 
-	draw(ctx: CanvasRenderingContext2D): void {
+	draw(ctx: CanvasRenderingContext2D) {
 		this.drawRectangle(this.position, this.size, this.rotation, this.hue, this.opacity, ctx);
 	}
 
