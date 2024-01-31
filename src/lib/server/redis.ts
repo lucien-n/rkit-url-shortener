@@ -30,7 +30,7 @@ export const limit = async (
 	const { success, reset } = await limiter.limit(clientAddress);
 
 	if (!success) {
-		const time_remaining = Math.floor((reset - Date.now()) / 1000);
+		const time_remaining = Math.ceil((reset - Date.now()) / 1000);
 		return { message: `Rate limit exceeded, try again in ${time_remaining} seconds`, status: 409 };
 	}
 };
