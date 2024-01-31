@@ -15,12 +15,12 @@
 
 <div class="mx-auto grid min-h-screen w-full max-w-2xl grid-rows-3 flex-col items-center space-y-8">
 	<div class="self-end">
-		<h2
-			class="mt-6 text-center text-4xl font-extrabold text-gray-900 dark:text-gray-100 sm:text-7xl"
+		<h1
+			class="hidden text-center text-3xl font-bold leading-tight tracking-tighter md:block md:text-6xl lg:leading-[1.1]"
 		>
 			URL Shortener
-		</h2>
-		<p class="text-md mt-2 text-center text-gray-600 dark:text-gray-400">
+		</h1>
+		<p class="max-w-[750px] text-center text-lg text-muted-foreground sm:text-xl">
 			Enter your long URL below to shorten it
 		</p>
 	</div>

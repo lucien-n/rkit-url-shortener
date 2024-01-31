@@ -2,12 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+	font-family: 'Geist Sans';
+	src: url('/font/GeistVariableVF.ttf');
+	src:
+		url('/font/GeistVariableVF.woff2') format('woff2'),
+		url('/font/GeistVariableVF.ttf') format('truetype');
+}
+
 @layer base {
 	* {
 		@apply border-border;
 	}
 	body {
 		@apply bg-background text-foreground;
+		font-family: 'Geist Sans', 'Helvetica', 'Arial', 'sans-serif';
 	}
 	html,
 	body {

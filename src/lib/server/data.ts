@@ -4,7 +4,7 @@ import type { ShortUrl } from '$remult/short-url/short-url.entity';
 import { redis } from './redis';
 
 const REDIS_URL_KEY = 'url';
-const CACHE_EXPIRATIONS = {
+export const CACHE_EXPIRATIONS = {
 	singleUrl: parseInt(REDIS_EX_SINGLE_URL ?? '600'),
 	mostViewedUrls: parseInt(REDIS_EX_MOST_VIEWED_URLS ?? '900')
 };
@@ -69,4 +69,19 @@ export const cacheUrls = async (urls: ShortUrl[]) => {
 	for (const url of urls) {
 		await cacheUrl(url, CACHE_EXPIRATIONS.mostViewedUrls);
 	}
+};
+
+
+export const getMostViewedUrls = async () => {
+	const cached = await redis.get<ShortUrl[]>('mostViewedUrls');
+	if (cached) {
+		return cached;
+	}
+
+	const mostViewedUrls = await ShortUrlsController.getMostViewed(3);
+	await redis.set('mostViewedUrls', mostViewedUrls, {
+		ex: CACHE_EXPIRATIONS.mostViewedUrls
+	});
+
+	return mostViewedUrls;
 };
