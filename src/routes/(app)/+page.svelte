@@ -34,8 +34,9 @@
 
 				if (shortenedUrl) urlsStore.add([shortenedUrl.id]);
 			}}
-			on:failure={() => {
-				toast.error('An error occured, please try again later');
+			on:failure={({ detail }) => {
+				const message = detail.data.form.message;
+				toast.error(message ?? 'An error occured, please try again later');
 			}}
 		/>
 	</div>
