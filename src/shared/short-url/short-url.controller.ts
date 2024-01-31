@@ -44,7 +44,7 @@ export class ShortUrlsController {
 		let id = generateId();
 		while (await this.findById(id)) id = generateId();
 
-		return remult.repo(ShortUrl).insert({ id, url, expiresAt: expiresAt });
+		return remult.repo(ShortUrl).insert({ id, url: url.toLowerCase(), expiresAt });
 	}
 
 	@BackendMethod({ allowed: false })
