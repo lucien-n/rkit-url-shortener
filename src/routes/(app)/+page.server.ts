@@ -31,8 +31,8 @@ export const actions: Actions = {
 		superFormAction(event, createShortUrlSchema, async (form) => {
 			const { url, expiration } = form.data;
 
-			const { error } = await limit(event, ratelimit.default);
-			if (error) return message(form, error, { status: 409 });
+			const error = await limit(event, ratelimit.default);
+			if (error) throw message(form, error.message, { status: error.status });
 
 			const shortenedUrl = await ShortUrlsController.create({ url, expiration });
 			await cacheUrl(shortenedUrl);

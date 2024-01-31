@@ -28,6 +28,7 @@
 		<UrlForm
 			form={data.form}
 			on:success={({ detail }) => {
+				console.log(detail);
 				shortenedUrl = detail.data.shortenedUrl;
 				showSuccessDialog = true;
 
