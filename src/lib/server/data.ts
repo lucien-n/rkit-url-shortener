@@ -4,7 +4,7 @@ import type { ShortUrl } from '$remult/short-url/short-url.entity';
 import { redis } from './redis';
 
 const REDIS_URL_KEY = 'url';
-const CACHE_EXPIRATIONS = {
+export const CACHE_EXPIRATIONS = {
 	singleUrl: parseInt(REDIS_EX_SINGLE_URL ?? '600'),
 	mostViewedUrls: parseInt(REDIS_EX_MOST_VIEWED_URLS ?? '900')
 };

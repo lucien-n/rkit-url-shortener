@@ -1,4 +1,4 @@
-import { cacheUrl } from '$lib/server/data';
+import { CACHE_EXPIRATIONS, cacheUrl } from '$lib/server/data';
 import { limit, ratelimit, redis } from '$lib/server/redis';
 import { superFormAction } from '$lib/server/super-utils';
 import { createShortUrlSchema } from '$remult/short-url/inputs/create-short-url-input';
@@ -14,7 +14,9 @@ const getMostViewedUrls = async () => {
 	}
 
 	const mostViewedUrls = await ShortUrlsController.getMostViewed(3);
-	await redis.set('mostViewedUrls', mostViewedUrls, { ex: 900 });
+	await redis.set('mostViewedUrls', mostViewedUrls, {
+		ex: CACHE_EXPIRATIONS.mostViewedUrls
+	});
 
 	return mostViewedUrls;
 };
