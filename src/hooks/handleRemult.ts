@@ -5,8 +5,11 @@ import { ShortUrl } from '$remult/short-url/short-url.entity';
 import { createPostgresDataProvider } from 'remult/postgres';
 import { remultSveltekit } from 'remult/remult-sveltekit';
 
+const connectionString = new URL(DATABASE_URL);
+connectionString.searchParams.set('sslmode', 'require');
+
 export const handleRemult = remultSveltekit({
-	dataProvider: createPostgresDataProvider({ connectionString: DATABASE_URL }),
+	dataProvider: createPostgresDataProvider({ connectionString: connectionString.toString() }),
 	initApi: async (remult) => {
 		if (dev) {
 			const urls = await remult.repo(ShortUrl).find({ include: { credentials: true } });
