@@ -70,3 +70,18 @@ export const cacheUrls = async (urls: ShortUrl[]) => {
 		await cacheUrl(url, CACHE_EXPIRATIONS.mostViewedUrls);
 	}
 };
+
+
+export const getMostViewedUrls = async () => {
+	const cached = await redis.get<ShortUrl[]>('mostViewedUrls');
+	if (cached) {
+		return cached;
+	}
+
+	const mostViewedUrls = await ShortUrlsController.getMostViewed(3);
+	await redis.set('mostViewedUrls', mostViewedUrls, {
+		ex: CACHE_EXPIRATIONS.mostViewedUrls
+	});
+
+	return mostViewedUrls;
+};
