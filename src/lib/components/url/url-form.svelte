@@ -42,7 +42,9 @@
 		loading = true;
 
 		return async ({ result }) => {
-			loading = false;
+			setTimeout(() => {
+				loading = false;
+			}, 750);
 
 			dispatch(result.type, result);
 		};
