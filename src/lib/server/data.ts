@@ -10,9 +10,9 @@ const CACHE_EXPIRATIONS = {
 };
 
 const getUrlFromCache = async (id: string) => {
-	const cached = await redis.get(`${REDIS_URL_KEY}:${id}`);
+	const cached = await redis.get<ShortUrl>(`${REDIS_URL_KEY}:${id}`);
 	if (cached) {
-		return JSON.parse(cached);
+		return cached;
 	}
 
 	return null;
@@ -31,10 +31,9 @@ export const getUrl = async (id: string, bypassCache = false) => {
 const getUrlsFromCache = async (ids: string[]) => {
 	const urls: ShortUrl[] = [];
 	for (const id of ids) {
-		const cached = await redis.get(`${REDIS_URL_KEY}:${id}`);
+		const cached = await redis.get<ShortUrl>(`${REDIS_URL_KEY}:${id}`);
 		if (cached) {
-			const parsed = JSON.parse(cached);
-			urls.push(parsed);
+			urls.push(cached);
 		}
 	}
 
@@ -59,9 +58,9 @@ export const getUrls = async (ids: string[], bypassCache = false) => {
 	return urls.concat(dbUrls);
 };
 
-export const cacheUrl = async (url: ShortUrl, expiration = CACHE_EXPIRATIONS.singleUrl) => {
+export const cacheUrl = async (url: ShortUrl, ex = CACHE_EXPIRATIONS.singleUrl) => {
 	const redisKey = `${REDIS_URL_KEY}:${url.id}`;
-	await redis.set(redisKey, JSON.stringify(url), 'EX', expiration);
+	await redis.set(redisKey, url, { ex });
 };
 
 export const cacheUrls = async (urls: ShortUrl[]) => {

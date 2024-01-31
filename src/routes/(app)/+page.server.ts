@@ -1,19 +1,20 @@
 import { cacheUrl } from '$lib/server/data';
-import { redis } from '$lib/server/redis';
+import { limit, ratelimit, redis } from '$lib/server/redis';
 import { superFormAction } from '$lib/server/super-utils';
 import { createShortUrlSchema } from '$remult/short-url/inputs/create-short-url-input';
 import { ShortUrlsController } from '$remult/short-url/short-url.controller';
-import { superValidate } from 'sveltekit-superforms/server';
+import type { ShortUrl } from '$remult/short-url/short-url.entity';
+import { message, superValidate } from 'sveltekit-superforms/server';
 import type { Actions, PageServerLoad } from './$types';
 
 const getMostViewedUrls = async () => {
-	const cached = await redis.get('mostViewedUrls');
+	const cached = await redis.get<ShortUrl[]>('mostViewedUrls');
 	if (cached) {
-		return JSON.parse(cached);
+		return cached;
 	}
 
 	const mostViewedUrls = await ShortUrlsController.getMostViewed(3);
-	await redis.set('mostViewedUrls', JSON.stringify(mostViewedUrls), 'EX', 900);
+	await redis.set('mostViewedUrls', mostViewedUrls, { ex: 900 });
 
 	return mostViewedUrls;
 };
@@ -30,8 +31,10 @@ export const actions: Actions = {
 		superFormAction(event, createShortUrlSchema, async (form) => {
 			const { url, expiration } = form.data;
 
-			const shortenedUrl = await ShortUrlsController.create({ url, expiration });
+			const { error } = await limit(event, ratelimit.default);
+			if (error) return message(form, error, { status: 409 });
 
+			const shortenedUrl = await ShortUrlsController.create({ url, expiration });
 			await cacheUrl(shortenedUrl);
 
 			return {
