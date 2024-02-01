@@ -1,4 +1,4 @@
-import { cacheUrl, getMostViewedUrls } from '$lib/server/data';
+import { cacheUrl } from '$lib/server/data';
 import { limit, ratelimit } from '$lib/server/redis';
 import { superFormAction } from '$lib/server/super-utils';
 import { createShortUrlSchema } from '$remult/short-url/inputs/create-short-url-input';
@@ -8,8 +8,7 @@ import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
 	return {
-		form: await superValidate(createShortUrlSchema),
-		mostViewedUrls: await getMostViewedUrls()
+		form: await superValidate(createShortUrlSchema)
 	};
 };
 

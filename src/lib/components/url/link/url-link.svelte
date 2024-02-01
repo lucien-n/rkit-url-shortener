@@ -11,9 +11,9 @@
 	import Favorite from './actions/favorite.svelte';
 	import RedirectCount from './actions/redirect-count.svelte';
 
-	export let url: ShortUrl;
+	export let url: ShortUrl | null;
 
-	const expiresAt = new Date(url.expiresAt);
+	const expiresAt = new Date(url?.expiresAt ?? '0');
 	const now = new Date();
 
 	const willExpire = expiresAt.getUTCFullYear() > now.getUTCFullYear() + 10;
@@ -23,7 +23,7 @@
 </script>
 
 <div class="flex w-full flex-row items-center justify-between gap-1">
-	{#if browser}
+	{#if browser && url}
 		{@const href = PUBLIC_ORIGIN + url.id}
 		<Tooltip.Root>
 			<Tooltip.Trigger>
