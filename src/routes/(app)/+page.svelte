@@ -40,7 +40,7 @@
 		/>
 	</div>
 	<div class="self-center">
-		<MostViewed mostViewedUrls={data.mostViewedUrls} />
+		<MostViewed />
 	</div>
 </div>
 
