@@ -9,13 +9,13 @@ dependencies:
     specifier: ^1.0.0
     version: 1.0.0
   '@upstash/redis':
-    specifier: ^1.28.2
+    specifier: ^1.28.3
     version: 1.28.3
   '@vercel/analytics':
     specifier: ^1.1.2
     version: 1.1.2
   '@vercel/speed-insights':
-    specifier: ^1.0.8
+    specifier: ^1.0.9
     version: 1.0.9(@sveltejs/kit@2.5.0)(svelte@4.2.9)
   bits-ui:
     specifier: ^0.15.1
@@ -24,7 +24,7 @@ dependencies:
     specifier: ^2.1.0
     version: 2.1.0
   formsnap:
-    specifier: ^0.4.2
+    specifier: ^0.4.3
     version: 0.4.3(svelte@4.2.9)(sveltekit-superforms@1.13.4)(zod@3.22.4)
   ioredis:
     specifier: ^5.3.2
@@ -48,7 +48,7 @@ dependencies:
     specifier: ^1.13.4
     version: 1.13.4(@sveltejs/kit@2.5.0)(svelte@4.2.9)(zod@3.22.4)
   tailwind-merge:
-    specifier: ^2.2.0
+    specifier: ^2.2.1
     version: 2.2.1
   tailwind-variants:
     specifier: ^0.1.20
@@ -59,25 +59,25 @@ dependencies:
 
 devDependencies:
   '@sveltejs/adapter-auto':
-    specifier: ^3.0.0
+    specifier: ^3.1.1
     version: 3.1.1(@sveltejs/kit@2.5.0)
   '@sveltejs/kit':
-    specifier: ^2.0.0
+    specifier: ^2.5.0
     version: 2.5.0(@sveltejs/vite-plugin-svelte@3.0.2)(svelte@4.2.9)(vite@5.0.12)
   '@sveltejs/vite-plugin-svelte':
-    specifier: ^3.0.0
+    specifier: ^3.0.2
     version: 3.0.2(svelte@4.2.9)(vite@5.0.12)
   '@types/eslint':
     specifier: 8.56.0
     version: 8.56.0
   '@typescript-eslint/eslint-plugin':
-    specifier: ^6.0.0
+    specifier: ^6.20.0
     version: 6.20.0(@typescript-eslint/parser@6.20.0)(eslint@8.56.0)(typescript@5.3.3)
   '@typescript-eslint/parser':
-    specifier: ^6.0.0
+    specifier: ^6.20.0
     version: 6.20.0(eslint@8.56.0)(typescript@5.3.3)
   autoprefixer:
-    specifier: ^10.4.16
+    specifier: ^10.4.17
     version: 10.4.17(postcss@8.4.33)
   eslint:
     specifier: ^8.56.0
@@ -89,40 +89,40 @@ devDependencies:
     specifier: ^2.35.1
     version: 2.35.1(eslint@8.56.0)(svelte@4.2.9)
   postcss:
-    specifier: ^8.4.32
+    specifier: ^8.4.33
     version: 8.4.33
   postcss-load-config:
     specifier: ^5.0.2
     version: 5.0.2(postcss@8.4.33)
   prettier:
-    specifier: ^3.1.1
+    specifier: ^3.2.5
     version: 3.2.5
   prettier-plugin-svelte:
     specifier: ^3.1.2
     version: 3.1.2(prettier@3.2.5)(svelte@4.2.9)
   prettier-plugin-tailwindcss:
-    specifier: ^0.5.9
+    specifier: ^0.5.11
     version: 0.5.11(prettier-plugin-svelte@3.1.2)(prettier@3.2.5)
   remult:
     specifier: ^0.25.4
     version: 0.25.4
   svelte:
-    specifier: ^4.2.7
+    specifier: ^4.2.9
     version: 4.2.9
   svelte-check:
-    specifier: ^3.6.0
+    specifier: ^3.6.3
     version: 3.6.3(postcss-load-config@5.0.2)(postcss@8.4.33)(svelte@4.2.9)
   tailwindcss:
-    specifier: ^3.3.6
+    specifier: ^3.4.1
     version: 3.4.1
   tslib:
-    specifier: ^2.4.1
+    specifier: ^2.6.2
     version: 2.6.2
   typescript:
-    specifier: ^5.0.0
+    specifier: ^5.3.3
     version: 5.3.3
   vite:
-    specifier: ^5.0.3
+    specifier: ^5.0.12
     version: 5.0.12
 
 packages:
