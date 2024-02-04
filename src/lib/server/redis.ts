@@ -1,8 +1,8 @@
 import {
-	ENABLE_RATE_LIMITING,
-	RL_DEFAULT_TOKENS,
-	UPSTASH_REDIS_REST_TOKEN,
-	UPSTASH_REDIS_REST_URL
+    RATELIMITING_DEFAULT_TOKENS,
+    RATELIMITING_ENABLED,
+    UPSTASH_REDIS_REST_TOKEN,
+    UPSTASH_REDIS_REST_URL
 } from '$env/static/private';
 import type { NumericRange, RequestEvent } from '@sveltejs/kit';
 import { Ratelimit } from '@upstash/ratelimit';
@@ -17,7 +17,7 @@ export const ratelimit = {
 	default: new Ratelimit({
 		redis,
 		prefix: '@ratelimit/default',
-		limiter: Ratelimit.slidingWindow(parseInt(RL_DEFAULT_TOKENS ?? '3'), '60s')
+		limiter: Ratelimit.slidingWindow(parseInt(RATELIMITING_DEFAULT_TOKENS ?? '3'), '60s')
 	})
 };
 
@@ -25,7 +25,7 @@ export const limit = async (
 	event: RequestEvent,
 	limiter: Ratelimit
 ): Promise<{ message: string; status: NumericRange<400, 599> } | undefined> => {
-	if (ENABLE_RATE_LIMITING === 'false') return;
+	if (RATELIMITING_ENABLED === 'false') return;
 
 	const clientAddress = event.getClientAddress();
 	const { success, reset } = await limiter.limit(clientAddress);

@@ -1,12 +1,12 @@
-import { REDIS_EX_MOST_VIEWED_URLS, REDIS_EX_SINGLE_URL } from '$env/static/private';
+import { REDIS_EXPIRATION_MOST_VIEWED_URLS, REDIS_EXPIRATION_SINGLE_URL } from '$env/static/private';
 import { ShortUrlsController } from '$remult/short-url/short-url.controller';
 import type { ShortUrl } from '$remult/short-url/short-url.entity';
 import { redis } from './redis';
 
 const REDIS_URL_KEY = 'url';
 export const CACHE_EXPIRATIONS = {
-	singleUrl: parseInt(REDIS_EX_SINGLE_URL ?? '600'),
-	mostViewedUrls: parseInt(REDIS_EX_MOST_VIEWED_URLS ?? '900')
+	singleUrl: parseInt(REDIS_EXPIRATION_SINGLE_URL ?? '600'),
+	mostViewedUrls: parseInt(REDIS_EXPIRATION_MOST_VIEWED_URLS ?? '900')
 };
 
 const getUrlFromCache = async (id: string) => {
