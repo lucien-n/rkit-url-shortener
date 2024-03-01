@@ -11,7 +11,6 @@
 	export let shortUrl: ShortUrl;
 
 	$: url = PUBLIC_ORIGIN + shortUrl.id;
-	$: console.log(shortUrl);
 </script>
 
 <Dialog.Root bind:open>
