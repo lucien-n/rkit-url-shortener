@@ -17,6 +17,10 @@ const config = {
 			$components: './src/lib/components/',
 			$shared: './src/shared',
 			$cn: './src/lib/shadcn/utils.ts'
+		},
+		csp: {
+			mode: 'hash',
+			directives: { 'script-src': ['self'] }
 		}
 	}
 };
