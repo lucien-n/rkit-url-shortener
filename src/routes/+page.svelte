@@ -15,11 +15,11 @@
 	onMount(() => titleStore.set('Shortener'));
 </script>
 
-<div class="container grid h-full grid-rows-3">
-	<div class="prose prose-2xl flex w-full flex-col self-end">
-		<h1 class="text-8xl">URL Shortener</h1>
+<div class=" grid h-full grid-rows-3 md:container">
+	<div class="prose prose-2xl flex w-full flex-col self-center md:self-end">
+		<h1 class="text-6xl md:text-8xl">URL Shortener</h1>
 	</div>
-	<div class="h-fit w-3/4 self-center">
+	<div class="h-fit w-full self-center md:w-3/4">
 		<CreateUrlForm
 			data={data.form}
 			on:failure={({ detail }) => {

@@ -41,21 +41,23 @@
 					bind:value={$formData.url}
 					placeholder="https://s.lucienn.dev"
 					class={cn(
-						'min-h-0 w-full resize-none overflow-hidden px-5 py-6 text-xl',
+						'min-h-0 w-full resize-none overflow-hidden md:px-5 md:py-6 md:text-xl',
 						!valid && 'border-destructive'
 					)}
 				/>
 			</Form.Control>
 			<Form.Description class="px-2">
-				By submitting, you accept our
-				<Button variant="link" href={urls.termsAndConditions} class="px-0">
-					terms and conditions
-				</Button>
+				<p class="px-0 text-xs md:text-sm">
+					By submitting, you accept our
+					<Button variant="link" href={urls.termsAndConditions} class="px-0 text-xs md:text-sm">
+						terms and conditions
+					</Button>
+				</p>
 			</Form.Description>
 		</Form.Field>
 	</div>
 	<br />
-	<Form.Button class="flex gap-2 px-7 py-6 text-xl" disabled={$submitting || !valid}>
+	<Form.Button class="flex gap-2 md:px-7 md:py-6 md:text-xl" disabled={$submitting || !valid}>
 		<Link2 size={20} />
 		Shorten
 	</Form.Button>
