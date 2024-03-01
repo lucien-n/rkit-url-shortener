@@ -10,6 +10,7 @@
 <svelte:head>
 	<title>{title}</title>
 	<meta property="description" content={description} />
+	<meta name="og:site_name" content="Shortener" />
 	<meta property="og:title" content={title} />
 	<meta property="og:description" content={description} />
 	<meta property="og:url" content="https://s.lucienn.dev/" />
