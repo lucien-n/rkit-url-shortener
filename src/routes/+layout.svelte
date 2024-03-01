@@ -3,7 +3,12 @@
 	import { Toaster } from 'svelte-sonner';
 	import { fly } from 'svelte/transition';
 	import '../app.pcss';
+	import { titleStore } from '$lib/stores';
 </script>
+
+<svelte:head>
+	<title>{$titleStore ?? 'Shortener'}</title>
+</svelte:head>
 
 <Toaster richColors />
 

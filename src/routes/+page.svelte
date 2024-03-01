@@ -4,11 +4,15 @@
 	import type { PageData } from './$types';
 	import type { ShortUrl } from '$shared/modules/short-urls/short-url.entity';
 	import UrlSuccessDialog from '$components/dialogs/url-success-dialog.svelte';
+	import { onMount } from 'svelte';
+	import { titleStore } from '$lib/stores';
 
 	export let data: PageData;
 
 	let showSuccessDialog = false;
 	let shortUrl: ShortUrl | null = null;
+
+	onMount(() => titleStore.set('Shortener'));
 </script>
 
 <div class="container grid h-full grid-rows-3">
