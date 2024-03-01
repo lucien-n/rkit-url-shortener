@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { PUBLIC_URL_ORIGIN } from '$env/static/public';
+	import { PUBLIC_ORIGIN } from '$env/static/public';
 	import { copyToClipboard } from '$lib/helpers';
 	import { Button } from '$shadcn/button';
 	import * as Dialog from '$shadcn/dialog';
@@ -10,7 +10,7 @@
 	export let open = false;
 	export let shortUrl: ShortUrl;
 
-	$: url = PUBLIC_URL_ORIGIN + shortUrl.id;
+	$: url = PUBLIC_ORIGIN + shortUrl.id;
 	$: console.log(shortUrl);
 </script>
 
