@@ -1,12 +1,11 @@
 <script lang="ts">
-	import { titleStore } from '$lib/stores';
 	import { urls } from '$lib/urls';
 	import { Button } from '$shadcn/button';
 	import { CaretLeft } from 'radix-icons-svelte';
-	import { onMount } from 'svelte';
-
-	onMount(() => titleStore.set('Terms And Conditions'));
+	import Seo from '$components/seo.svelte';
 </script>
+
+<Seo title="Terms And Conditions" />
 
 <div class="h-full w-full">
 	<div class="fixed">

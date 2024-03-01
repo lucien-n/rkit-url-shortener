@@ -4,16 +4,15 @@
 	import type { PageData } from './$types';
 	import type { ShortUrl } from '$shared/modules/short-urls/short-url.entity';
 	import UrlSuccessDialog from '$components/dialogs/url-success-dialog.svelte';
-	import { onMount } from 'svelte';
-	import { titleStore } from '$lib/stores';
+	import Seo from '$components/seo.svelte';
 
 	export let data: PageData;
 
 	let showSuccessDialog = false;
 	let shortUrl: ShortUrl | null = null;
-
-	onMount(() => titleStore.set('Shortener'));
 </script>
+
+<Seo title="Shortener" />
 
 <div class=" grid h-full grid-rows-3 md:container">
 	<div class="prose prose-2xl flex w-full flex-col self-center md:self-end">
