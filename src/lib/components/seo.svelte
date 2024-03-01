@@ -24,4 +24,5 @@
 	<meta name="og:image:secure_url" content={image} />
 	<meta name="og:site_name" content="Shortener" />
 	<meta name="og:url" content="https://s.lucienn.dev/" />
+	<meta name="author" content="lucienn" />
 </svelte:head>
