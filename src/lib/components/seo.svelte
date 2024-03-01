@@ -10,10 +10,10 @@
 <svelte:head>
 	<title>{title}</title>
 	<meta name="description" content={description} />
-	<meta name="og:site_name" content="Shortener" />
+	<meta name="keywords" content={keywords} />
 	<meta name="og:title" content={title} />
 	<meta name="og:description" content={description} />
-	<meta name="og:url" content="https://s.lucienn.dev/" />
 	<meta name="og:image" content={image} />
-	<meta name="keywords" content={keywords} />
+	<meta name="og:site_name" content="Shortener" />
+	<meta name="og:url" content="https://s.lucienn.dev/" />
 </svelte:head>
