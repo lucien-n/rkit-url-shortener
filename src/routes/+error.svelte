@@ -16,7 +16,7 @@
 		</div>
 		<div>
 			<p class="text-xl">
-				{$page.error?.message}
+				{$page.error?.message ?? 'An error occured'}
 			</p>
 			<Button class="p-0 text-base text-muted-foreground" variant="link" href={urls.home}>
 				<CaretRight class="mt-1" />
